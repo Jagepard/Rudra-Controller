@@ -1,11 +1,11 @@
 {
-    "name"        : "rudra/db",
+    "name"        : "rudra/controller",
     "description" : "The Rudra framework",
     "version"     : "1.0.0-dev",
     "type"        : "library",
     "keywords"    : [
         "rudra",
-        "db"
+        "controller"
     ],
     "license"     : "MIT",
     "authors"     : [
