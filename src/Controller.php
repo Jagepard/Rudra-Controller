@@ -2,7 +2,7 @@
 
 namespace Rudra;
 
-use Config\Config;
+use App\Config\Config;
 
 /**
  * Date: 27.07.15
