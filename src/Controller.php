@@ -49,6 +49,21 @@ class Controller
     protected $token = false;
 
     /**
+     * @var array
+     */
+    protected $post;
+
+    /**
+     * @var array
+     */
+    protected $get;
+
+    /**
+     * @var array
+     */
+    protected $server;
+
+    /**
      * Записывает массив $_SESSION['csrf_token']
      * если в массиве больше 2 элементов, убираем первый,
      * таким образом индексы массива сдвигаются на -1
@@ -57,11 +72,13 @@ class Controller
     {
         switch (Config::TE) {
             case 'twig':
-                $loader     = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
-                $this->twig = new \Twig_Environment($loader, array(
-                    'cache' => BP . '/vendor/twig/compilation_cache',
-                    'debug' => true,
-                ));
+                $loader     = new \Twig_Loader_Filesystem(BP.'/app/Twig/view');
+                $this->twig = new \Twig_Environment(
+                    $loader, array(
+                        'cache' => BP.'/vendor/twig/compilation_cache',
+                        'debug' => true,
+                    )
+                );
                 if (DEV) {
                     $this->twig->addExtension(new \Twig_Extension_Debug());
                 }
@@ -69,27 +86,35 @@ class Controller
                 /**
                  * Добавил функцию к Twig
                  */
-                $function = new \Twig_SimpleFunction('count', function ($var) {
+                $function = new \Twig_SimpleFunction(
+                    'count', function ($var) {
                     return count($var);
-                });
+                }
+                );
 
                 $this->twig->addFunction($function);
 
-                $function = new \Twig_SimpleFunction('md5', function ($var) {
+                $function = new \Twig_SimpleFunction(
+                    'md5', function ($var) {
                     return md5($var);
-                });
+                }
+                );
 
                 $this->twig->addFunction($function);
 
-                $function = new \Twig_SimpleFunction('auth', function ($url = null, $false = null) {
+                $function = new \Twig_SimpleFunction(
+                    'auth', function ($url = null, $false = null) {
                     return $this->auth($url, $false);
-                });
+                }
+                );
 
                 $this->twig->addFunction($function);
 
-                $function = new \Twig_SimpleFunction('getArray', function ($key) {
+                $function = new \Twig_SimpleFunction(
+                    'getArray', function ($key) {
                     return getArray($key);
-                });
+                }
+                );
 
                 $this->twig->addFunction($function);
                 break;
@@ -142,6 +167,9 @@ class Controller
      */
     public function init(iContainer $di)
     {
+        $this->get                = $_GET;
+        $this->post               = $_POST;
+        $this->server             = $_SERVER;
         $this->di                 = $di;
         $this->data['session']    = $_SESSION;
         $this->data['title']      = 'helpio.ru - доска объявлений о компьютерах и комплектующих';
@@ -192,9 +220,9 @@ class Controller
 
         if (is_array($static) and $static[2] < 3) {
             // Имя файла
-            $file = BP . $module . '/view/' . $static[0] . '/' . $static[1] . '.php';
+            $file = BP.$module.'/view/'.$static[0].'/'.$static[1].'.php';
             // Имя директории
-            $dir = BP . $module . '/view/' . $static[0];
+            $dir = BP.$module.'/view/'.$static[0];
             /*
              * Если директории не существует, то создаем
              * с правами 755
@@ -216,8 +244,10 @@ class Controller
                     file_put_contents($file, $pageContent);
                 }
             }
+
             return file_get_contents($file);
         }
+
         return $pageContent;
     }
 
@@ -231,7 +261,7 @@ class Controller
         $path   = str_replace('.', '/', $path);
         $module = str_replace('.', '/', $module);
 
-        $file = BP . $module . '/view/' . $path . '.php';
+        $file = BP.$module.'/view/'.$path.'.php';
         if (count($data_array)) {
             extract($data_array, EXTR_REFS);
         }
@@ -313,11 +343,15 @@ class Controller
     {
         switch ($value[0]) {
             case 'get':
-                if (isset($_GET[$value[1]])) $this->model->$method($_GET);
+                if (isset($_GET[$value[1]])) {
+                    $this->model->$method($_GET);
+                }
                 break;
             case 'post':
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    if (isset($_POST[$value[1]])) $this->model->$method($_POST);
+                    if (isset($_POST[$value[1]])) {
+                        $this->model->$method($_POST);
+                    }
                 }
                 break;
         }
@@ -335,6 +369,90 @@ class Controller
         foreach ($arr as $val) {
             $ids[] = $val[$key];
         }
+
         return array_values($ids);
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    public function getServer(string $key): string
+    {
+        return $this->server[$key];
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function hasPost(string $key): bool
+    {
+        return isset($this->post[$key]);
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    public function getPost(string $key): string
+    {
+        return $this->post[$key];
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function setSession(string $key, string $value)
+    {
+        session_start();
+        $_SESSION[$key] = $value;
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    public function getGet(string $key): string
+    {
+        return $this->get[$key];
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function hasGet(string $key): bool
+    {
+        return isset($this->get[$key]);
+    }
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function getSession(string $key): string
+    {
+        return $_SESSION[$key];
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function hasSession(string $key): bool
+    {
+        return isset($_SESSION[$key]);
+    }
+
+    public function startSession()
+    {
+        session_start();
+    }
+
+    public function stopSession()
+    {
+        session_destroy();
     }
 }
