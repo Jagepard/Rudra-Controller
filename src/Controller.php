@@ -94,14 +94,6 @@ class Controller
                 );
 
                 $this->twig->addFunction($function);
-
-                $function = new \Twig_SimpleFunction(
-                    'getArray', function ($key) {
-                    return getArray($key);
-                }
-                );
-
-                $this->twig->addFunction($function);
                 break;
         }
 
@@ -113,11 +105,11 @@ class Controller
         }
 
         $_SESSION['csrf_token'][] = md5(uniqid(mt_rand(), true));
-        for ($i = 1; count($_SESSION['csrf_token']) < 3; $i++) {
+        for ($i = 1; count($_SESSION['csrf_token']) < 4; $i++) {
             $_SESSION['csrf_token'][$i] = md5(uniqid(mt_rand(), true));
         }
 
-        if (count($_SESSION['csrf_token']) > 3) {
+        if (count($_SESSION['csrf_token']) > 4) {
             array_shift($_SESSION['csrf_token']);
         }
     }
