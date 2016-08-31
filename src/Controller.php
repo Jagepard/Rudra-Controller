@@ -146,9 +146,9 @@ class Controller
     {
         $this->di                 = $di;
         $this->data['session']    = $_SESSION;
-        $this->data['title']      = 'helpio.ru - доска объявлений о компьютерах и комплектующих';
+        $this->data['title']      = 'Main Title';
         $this->data['sitekey']    = Config::CAPTHA_SITEKEY;
-        $this->data['csrf_token'] = $_SESSION['csrf_token'][2];
+        $this->data['csrf_token'] = $_SESSION['csrf_token'][3];
     }
 
     /**
