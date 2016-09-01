@@ -57,10 +57,10 @@ class Controller
     {
         switch (Config::TE) {
             case 'twig':
-                $loader     = new \Twig_Loader_Filesystem(BP.'/app/Twig/view');
+                $loader     = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
                 $this->twig = new \Twig_Environment(
                     $loader, array(
-                        'cache' => BP.'/vendor/twig/compilation_cache',
+                        'cache' => BP . '/vendor/twig/compilation_cache',
                         'debug' => true,
                     )
                 );
@@ -144,11 +144,7 @@ class Controller
      */
     public function init(iContainer $di)
     {
-        $this->di                 = $di;
-        $this->data['session']    = $_SESSION;
-        $this->data['title']      = 'Main Title';
-        $this->data['sitekey']    = Config::CAPTHA_SITEKEY;
-        $this->data['csrf_token'] = $_SESSION['csrf_token'][3];
+        $this->di = $di;
     }
 
     /**
@@ -194,9 +190,9 @@ class Controller
 
         if (is_array($static) and $static[2] < 3) {
             // Имя файла
-            $file = BP.$module.'/view/'.$static[0].'/'.$static[1].'.php';
+            $file = BP . $module . '/view/' . $static[0] . '/' . $static[1] . '.php';
             // Имя директории
-            $dir = BP.$module.'/view/'.$static[0];
+            $dir = BP . $module . '/view/' . $static[0];
             /*
              * Если директории не существует, то создаем
              * с правами 755
@@ -235,7 +231,7 @@ class Controller
         $path   = str_replace('.', '/', $path);
         $module = str_replace('.', '/', $module);
 
-        $file = BP.$module.'/view/'.$path.'.php';
+        $file = BP . $module . '/view/' . $path . '.php';
         if (count($data_array)) {
             extract($data_array, EXTR_REFS);
         }
