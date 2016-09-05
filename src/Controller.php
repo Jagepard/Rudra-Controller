@@ -55,6 +55,80 @@ class Controller
      */
     public function __construct()
     {
+        /**
+         * CSRF protection
+         */
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+
+        $_SESSION['csrf_token'][] = md5(uniqid(mt_rand(), true));
+
+        for ($i = 1; count($_SESSION['csrf_token']) < 4; $i++) {
+            $_SESSION['csrf_token'][$i] = md5(uniqid(mt_rand(), true));
+        }
+
+        if (count($_SESSION['csrf_token']) > 4) {
+            array_shift($_SESSION['csrf_token']);
+        }
+    }
+
+    /**
+     * @param null $userToken
+     * @param bool $false
+     * @param array $redirect
+     * @return bool
+     *
+     * Проверяет авторизован ли пользователь
+     * Если да, то пропускаем выполнение скрипта дальше,
+     * Если нет, то редиректим на страницу регистрации
+     */
+    public function auth($userToken = null, $false = false, $redirect = ['', 'login'])
+    {
+        if (!isset($userToken)) {
+            if ($this->isToken() === $_SESSION['token']) {
+                return true;
+            } else {
+                (!$false) ? $this->di->get('redirect')->run($redirect[0]) : false;
+            }
+        } else {
+            if ($userToken === $this->token) {
+                return true;
+            } else {
+                (!$false) ? $this->di->get('redirect')->run($redirect[1]) : false;
+            }
+        }
+    }
+
+    /**
+     * @param iContainer $di
+     *
+     * Здесь можно ввести дополнительные параметры при инициализации
+     */
+    public function init(iContainer $di)
+    {
+        $this->di = $di;
+        $this->templateEngine(Config::TE);
+    }
+
+    /**
+     * Метод выполняется перед вызовом контроллера
+     */
+    public function before()
+    {
+
+    }
+
+    /**
+     * Метод выполняется после вызова контроллера
+     */
+    public function after()
+    {
+
+    }
+
+    public function templateEngine($config)
+    {
         switch (Config::TE) {
             case 'twig':
                 $loader     = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
@@ -96,127 +170,23 @@ class Controller
                 $this->twig->addFunction($function);
                 break;
         }
-
-        /**
-         * CSRF protection
-         */
-        if (!isset($_SESSION)) {
-            session_start();
-        }
-
-        $_SESSION['csrf_token'][] = md5(uniqid(mt_rand(), true));
-        for ($i = 1; count($_SESSION['csrf_token']) < 4; $i++) {
-            $_SESSION['csrf_token'][$i] = md5(uniqid(mt_rand(), true));
-        }
-
-        if (count($_SESSION['csrf_token']) > 4) {
-            array_shift($_SESSION['csrf_token']);
-        }
-    }
-
-    /**
-     * @param null $url
-     * @param null $false
-     * @return bool
-     * Проверяет авторизован ли пользователь
-     * Если да, то пропускаем выполнение скрипта дальше,
-     * Если нет, то редиректим на страницу регистрации
-     */
-    public function auth($url = null, $false = null)
-    {
-        if (!isset($url)) {
-            if ($this->token === $_SESSION['token']) {
-                return true;
-            } else {
-                (!isset($false)) ? $this->di->get('redirect')->run('register') : false;
-            }
-        } else {
-            if ($url === $this->token) {
-                return true;
-            } else {
-                (!isset($false)) ? $this->di->get('redirect')->run('login') : false;
-            }
-        }
-    }
-
-    /**
-     * @param iContainer $di
-     */
-    public function init(iContainer $di)
-    {
-        $this->di = $di;
-    }
-
-    /**
-     * Метод выполняется перед вызовом контроллера
-     */
-    public function before()
-    {
-
-    }
-
-    /**
-     * Метод выполняется после вызова контроллера
-     */
-    public function after()
-    {
-
     }
 
     /**
      * @param      $path
      * @param      $module
      * @param null $data_array
-     * @param null $static
      * @return string|void
      * Буферизируем вывод.
-     * В зависимости от значения параметра $static можно использовать
-     * в качестве альтернативного варианта кеширования
      */
-    public function setView($path, $module, $data_array = null, $static = null)
+    public function setView($path, $module, $data_array = null)
     {
         $path   = str_replace('.', '/', $path);
         $module = str_replace('.', '/', $module);
 
-        if (is_array($static) and !isset($static[2])) {
-            $static[2] = $this->cached($static[2]);
-        }
-
-        if ($static[2] >= 2 or empty($static)) {
-            ob_start();
-            $this->render($path, $module, $data_array);
-            $pageContent = ob_get_clean();
-        }
-
-        if (is_array($static) and $static[2] < 3) {
-            // Имя файла
-            $file = BP . $module . '/view/' . $static[0] . '/' . $static[1] . '.php';
-            // Имя директории
-            $dir = BP . $module . '/view/' . $static[0];
-            /*
-             * Если директории не существует, то создаем
-             * с правами 755
-             */
-            if (!file_exists($dir)) {
-                mkdir($dir, 0755, true);
-            }
-            /*
-             * Если файла нет, то создаем его и записываем
-             */
-            if (!file_exists($file)) {
-                if ($static[2] == 1) {
-                    return;
-                }
-                file_put_contents($file, $pageContent);
-                // Перезаписываем
-            } elseif (md5($pageContent) != md5(file_get_contents($file))) {
-                if ($static[2] == 2) {
-                    file_put_contents($file, $pageContent);
-                }
-            }
-
-            return file_get_contents($file);
-        }
+        ob_start();
+        $this->render($path, $module, $data_array);
+        $pageContent = ob_get_clean();
 
         return $pageContent;
     }
@@ -232,9 +202,11 @@ class Controller
         $module = str_replace('.', '/', $module);
 
         $file = BP . $module . '/view/' . $path . '.php';
+
         if (count($data_array)) {
             extract($data_array, EXTR_REFS);
         }
+
         if (file_exists($file)) {
             require $file;
         }
@@ -244,6 +216,7 @@ class Controller
      * @param $value
      * @param $param
      * Обрабатывает дополнительные параметры передаваемые в url
+     * Используется только при авторутинге
      */
     public function _404($value, $param = [])
     {
@@ -305,41 +278,18 @@ class Controller
     }
 
     /**
-     * @param $value
-     * @param $method
-     * Декорация для обращения к модели
+     * @return boolean
      */
-    public function model($value, $method)
+    public function isToken()
     {
-        switch ($value[0]) {
-            case 'get':
-                if (isset($_GET[$value[1]])) {
-                    $this->model->$method($_GET);
-                }
-                break;
-            case 'post':
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    if (isset($_POST[$value[1]])) {
-                        $this->model->$method($_POST);
-                    }
-                }
-                break;
-        }
+        return $this->token;
     }
 
     /**
-     * @param        $arr
-     * @param string $key
-     * @return array
-     * Вспомогательный метод, возвращаяет массив ключей
-     * необходимых для указания белого списка в методе Controller::_404
+     * @param boolean $token
      */
-    public function fetchData($arr, $key = 'ID')
+    public function setToken($token)
     {
-        foreach ($arr as $val) {
-            $ids[] = $val[$key];
-        }
-
-        return array_values($ids);
+        $this->token = $token;
     }
 }
