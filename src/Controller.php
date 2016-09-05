@@ -49,31 +49,6 @@ class Controller
     protected $token = false;
 
     /**
-     * Записывает массив $_SESSION['csrf_token']
-     * если в массиве больше 2 элементов, убираем первый,
-     * таким образом индексы массива сдвигаются на -1
-     */
-    public function __construct()
-    {
-        /**
-         * CSRF protection
-         */
-        if (!isset($_SESSION)) {
-            session_start();
-        }
-
-        $_SESSION['csrf_token'][] = md5(uniqid(mt_rand(), true));
-
-        for ($i = 1; count($_SESSION['csrf_token']) < 4; $i++) {
-            $_SESSION['csrf_token'][$i] = md5(uniqid(mt_rand(), true));
-        }
-
-        if (count($_SESSION['csrf_token']) > 4) {
-            array_shift($_SESSION['csrf_token']);
-        }
-    }
-
-    /**
      * @param null $userToken
      * @param bool $false
      * @param array $redirect
@@ -108,6 +83,7 @@ class Controller
     public function init(iContainer $di)
     {
         $this->di = $di;
+        $this->csrfProtection();
         $this->templateEngine(Config::TE);
     }
 
@@ -169,6 +145,26 @@ class Controller
 
                 $this->twig->addFunction($function);
                 break;
+        }
+    }
+
+    public function csrfProtection()
+    {
+        /**
+         * CSRF protection
+         */
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+
+        $_SESSION['csrf_token'][] = md5(uniqid(mt_rand(), true));
+
+        for ($i = 1; count($_SESSION['csrf_token']) < 4; $i++) {
+            $_SESSION['csrf_token'][$i] = md5(uniqid(mt_rand(), true));
+        }
+
+        if (count($_SESSION['csrf_token']) > 4) {
+            array_shift($_SESSION['csrf_token']);
         }
     }
 
