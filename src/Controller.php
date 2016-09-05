@@ -105,7 +105,7 @@ class Controller
 
     public function templateEngine($config)
     {
-        switch (Config::TE) {
+        switch ($config) {
             case 'twig':
                 $loader     = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
                 $this->twig = new \Twig_Environment(
