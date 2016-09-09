@@ -64,13 +64,13 @@ class Controller
             if ($this->isToken() === $_SESSION['token']) {
                 return true;
             } else {
-                (!$false) ? $this->di->get('redirect')->run($redirect[0]) : false;
+                (!$false) ? $this->getDi()->get('redirect')->run($redirect[0], 'https') : false;
             }
         } else {
-            if ($userToken === $this->token) {
+            if ($userToken === $this->isToken()) {
                 return true;
             } else {
-                (!$false) ? $this->di->get('redirect')->run($redirect[1]) : false;
+                (!$false) ? $this->getDi()->get('redirect')->run($redirect[1], 'https') : false;
             }
         }
     }
@@ -82,7 +82,7 @@ class Controller
      */
     public function init(iContainer $di)
     {
-        $this->di = $di;
+        $this->setDi($di);
         $this->csrfProtection();
         $this->templateEngine(Config::TE);
     }
@@ -103,19 +103,24 @@ class Controller
 
     }
 
+    /**
+     * @param $config
+     */
     public function templateEngine($config)
     {
-        switch ($config) {
+        switch (Config::TE) {
             case 'twig':
-                $loader     = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
-                $this->twig = new \Twig_Environment(
+                $loader = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
+
+                $this->setTwig(new \Twig_Environment(
                     $loader, array(
                         'cache' => BP . '/vendor/twig/compilation_cache',
                         'debug' => true,
                     )
-                );
+                ));
+
                 if (DEV) {
-                    $this->twig->addExtension(new \Twig_Extension_Debug());
+                    $this->getTwig()->addExtension(new \Twig_Extension_Debug());
                 }
 
                 /**
@@ -127,7 +132,7 @@ class Controller
                 }
                 );
 
-                $this->twig->addFunction($function);
+                $this->getTwig()->addFunction($function);
 
                 $function = new \Twig_SimpleFunction(
                     'md5', function ($var) {
@@ -135,7 +140,7 @@ class Controller
                 }
                 );
 
-                $this->twig->addFunction($function);
+                $this->getTwig()->addFunction($function);
 
                 $function = new \Twig_SimpleFunction(
                     'auth', function ($url = null, $false = null) {
@@ -287,5 +292,63 @@ class Controller
     public function setToken($token)
     {
         $this->token = $token;
+    }
+
+    /**
+     * @param mixed $di
+     */
+    public function setDi($di)
+    {
+        $this->di = $di;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDi()
+    {
+        return $this->di;
+    }
+
+    /**
+     * @param $key
+     * @param $data
+     */
+    public function setData($key, $data)
+    {
+        $this->data[$key] = $data;
+    }
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function getDataItem($key)
+    {
+        return $this->data[$key];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param mixed $twig
+     */
+    public function setTwig($twig)
+    {
+        $this->twig = $twig;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTwig()
+    {
+        return $this->twig;
     }
 }
