@@ -182,8 +182,9 @@ class Controller
      */
     public function setView($path, $module, $data_array = null)
     {
-        $path   = str_replace('.', '/', $path);
-        $module = str_replace('.', '/', $module);
+        $data_array['di'] = $this->getDi();
+        $path             = str_replace('.', '/', $path);
+        $module           = str_replace('.', '/', $module);
 
         ob_start();
         $this->render($path, $module, $data_array);
@@ -199,8 +200,9 @@ class Controller
      */
     public function render($path, $module = false, $data_array = null)
     {
-        $path   = str_replace('.', '/', $path);
-        $module = str_replace('.', '/', $module);
+        $data_array['di'] = $this->getDi();
+        $path             = str_replace('.', '/', $path);
+        $module           = str_replace('.', '/', $module);
 
         $file = BP . $module . '/view/' . $path . '.php';
 
