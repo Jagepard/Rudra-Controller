@@ -42,38 +42,6 @@ class Controller
      * Для экземпляра модели
      */
     protected $model;
-    /**
-     * @var bool
-     * Параметр необходимый для авторизации
-     */
-    protected $token = false;
-
-    /**
-     * @param null $userToken
-     * @param bool $false
-     * @param array $redirect
-     * @return bool
-     *
-     * Проверяет авторизован ли пользователь
-     * Если да, то пропускаем выполнение скрипта дальше,
-     * Если нет, то редиректим на страницу регистрации
-     */
-    public function auth($userToken = null, $false = false, $redirect = ['', 'login'])
-    {
-        if (!isset($userToken)) {
-            if ($this->isToken() === $_SESSION['token']) {
-                return true;
-            } else {
-                (!$false) ? $this->getDi()->get('redirect')->run($redirect[0], 'https') : false;
-            }
-        } else {
-            if ($userToken === $this->isToken()) {
-                return true;
-            } else {
-                (!$false) ? $this->getDi()->get('redirect')->run($redirect[1], 'https') : false;
-            }
-        }
-    }
 
     /**
      * @param iContainer $di
@@ -278,22 +246,6 @@ class Controller
     public function errorPage()
     {
         echo 'Нет такой страницы: <h1>«Ошибка 404»</h1>';
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param boolean $token
-     */
-    public function setToken($token)
-    {
-        $this->token = $token;
     }
 
     /**
