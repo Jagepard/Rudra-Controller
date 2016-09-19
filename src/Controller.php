@@ -1,42 +1,48 @@
 <?php
 
-namespace Rudra;
-
-use App\Config\Config;
-
 /**
  * Date: 27.07.15
  * Time: 13:07
+ * 
  * @author    : Korotkov Danila <dankorot@gmail.com>
  * @copyright Copyright (c) 2016, Korotkov Danila
  * @license   http://www.gnu.org/licenses/gpl.html GNU GPLv3.0
  */
 
+namespace Rudra;
+
+use App\Config\Config;
+
 /**
  * Class Controller
- * @package Core
+ * @package Rudra
  * Родительский класс для контроллеров
  */
 class Controller
 {
+
     /**
      * @var
      */
     public static $sdi;
+
     /**
      * @var
      */
     public $di;
+
     /**
      * @var
      * Для шаблонизатора
      */
     protected $twig;
+
     /**
      * @var
      * Для данных передаваемых в $data_array
      */
     protected $data;
+
     /**
      * @var
      * Для экземпляра модели
@@ -44,11 +50,10 @@ class Controller
     protected $model;
 
     /**
-     * @param iContainer $di
-     *
+     * @param IContainer $di
      * Здесь можно ввести дополнительные параметры при инициализации
      */
-    public function init(iContainer $di)
+    public function init(IContainer $di)
     {
         $this->setDi($di);
         $this->csrfProtection();
@@ -60,7 +65,7 @@ class Controller
      */
     public function before()
     {
-
+        
     }
 
     /**
@@ -68,7 +73,7 @@ class Controller
      */
     public function after()
     {
-
+        
     }
 
     /**
@@ -76,49 +81,50 @@ class Controller
      */
     public function templateEngine($config)
     {
-        switch (Config::TE) {
+        switch ($config) {
             case 'twig':
                 $loader = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
 
                 $this->setTwig(new \Twig_Environment(
-                    $loader, array(
-                        'cache' => BP . '/vendor/twig/compilation_cache',
-                        'debug' => true,
-                    )
+                        $loader, array(
+                    'cache' => BP . '/vendor/twig/compilation_cache',
+                    'debug' => true,
+                        )
                 ));
 
                 if (DEV) {
                     $this->getTwig()->addExtension(new \Twig_Extension_Debug());
                 }
 
-                /**
-                 * Добавил функцию к Twig
-                 */
-                $function = new \Twig_SimpleFunction(
-                    'count', function ($var) {
-                    return count($var);
-                }
-                );
-
-                $this->getTwig()->addFunction($function);
-
-                $function = new \Twig_SimpleFunction(
-                    'md5', function ($var) {
-                    return md5($var);
-                }
-                );
-
-                $this->getTwig()->addFunction($function);
-
-                $function = new \Twig_SimpleFunction(
-                    'auth', function ($url = null, $false = null) {
-                    return $this->auth($url, $false);
-                }
-                );
-
-                $this->twig->addFunction($function);
+                $this->addFunctionToTwig('count');
+                $this->addFunctionToTwig('md5');
+                $this->addFunctionToTwig('auth', true);
                 break;
         }
+    }
+
+    /**
+     * @param \Twig_SimpleFunction $name
+     * @param Controller $this
+     * @param type $this
+     */
+    public function addFunctionToTwig($name, $this = false)
+    {
+        if ($this) {
+            $$name = new \Twig_SimpleFunction(
+                    $name, function ($url = null, $false = null) {
+                return $this->$name($url, $false);
+            }
+            );
+        } else {
+            $$name = new \Twig_SimpleFunction(
+                    $name, function ($var) {
+                return $name($var);
+            }
+            );
+        }
+
+        $this->getTwig()->addFunction($$name);
     }
 
     public function csrfProtection()
@@ -305,4 +311,5 @@ class Controller
     {
         return $this->twig;
     }
+
 }
