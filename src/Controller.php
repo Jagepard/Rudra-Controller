@@ -104,13 +104,12 @@ class Controller
     }
 
     /**
-     * @param \Twig_SimpleFunction $name
-     * @param Controller $this
-     * @param type $this
+     * @param      $name
+     * @param bool $instance
      */
-    public function addFunctionToTwig($name, $this = false)
+    public function addFunctionToTwig($name, $instance = false)
     {
-        if ($this) {
+        if ($instance) {
             $$name = new \Twig_SimpleFunction(
                     $name, function ($url = null, $false = null) {
                 return $this->$name($url, $false);
