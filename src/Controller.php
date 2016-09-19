@@ -81,25 +81,23 @@ class Controller
      */
     public function templateEngine($config)
     {
-        switch ($config) {
-            case 'twig':
-                $loader = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
+        if ('twig' == $config) {
+            $loader = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
 
-                $this->setTwig(new \Twig_Environment(
-                        $loader, array(
-                    'cache' => BP . '/vendor/twig/compilation_cache',
-                    'debug' => true,
-                        )
-                ));
+            $this->setTwig(new \Twig_Environment(
+                    $loader, array(
+                'cache' => BP . '/vendor/twig/compilation_cache',
+                'debug' => true,
+                    )
+            ));
 
-                if (DEV) {
-                    $this->getTwig()->addExtension(new \Twig_Extension_Debug());
-                }
+            if (DEV) {
+                $this->getTwig()->addExtension(new \Twig_Extension_Debug());
+            }
 
-                $this->addFunctionToTwig('count');
-                $this->addFunctionToTwig('md5');
-                $this->addFunctionToTwig('auth', true);
-                break;
+            $this->addFunctionToTwig('count');
+            $this->addFunctionToTwig('md5');
+            $this->addFunctionToTwig('auth', true);
         }
     }
 
