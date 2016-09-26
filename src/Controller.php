@@ -153,7 +153,6 @@ class Controller
      */
     public function setView($path, $module, $data_array = null)
     {
-        $data_array['di'] = $this->getDi();
         $path             = str_replace('.', '/', $path);
         $module           = str_replace('.', '/', $module);
 
@@ -171,7 +170,6 @@ class Controller
      */
     public function render($path, $module = false, $data_array = null)
     {
-        $data_array['di'] = $this->getDi();
         $path             = str_replace('.', '/', $path);
         $module           = str_replace('.', '/', $module);
 
