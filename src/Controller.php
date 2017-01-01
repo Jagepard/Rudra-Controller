@@ -3,7 +3,7 @@
 /**
  * Date: 27.07.15
  * Time: 13:07
- * 
+ *
  * @author    : Korotkov Danila <dankorot@gmail.com>
  * @copyright Copyright (c) 2016, Korotkov Danila
  * @license   http://www.gnu.org/licenses/gpl.html GNU GPLv3.0
@@ -15,8 +15,9 @@ use App\Config\Config;
 
 /**
  * Class Controller
+ *
  * @package Rudra
- * Родительский класс для контроллеров
+ *          Родительский класс для контроллеров
  */
 class Controller
 {
@@ -65,7 +66,7 @@ class Controller
      */
     public function before()
     {
-        
+
     }
 
     /**
@@ -73,7 +74,7 @@ class Controller
      */
     public function after()
     {
-        
+
     }
 
     /**
@@ -85,43 +86,19 @@ class Controller
             $loader = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
 
             $this->setTwig(new \Twig_Environment(
-                    $loader, array(
-                'cache' => BP . '/vendor/twig/compilation_cache',
-                'debug' => true,
-                    )
+                $loader, array(
+                    'cache' => BP . '/vendor/twig/compilation_cache',
+                    'debug' => true,
+                )
             ));
 
             if (DEV) {
                 $this->getTwig()->addExtension(new \Twig_Extension_Debug());
             }
 
-            $this->addFunctionToTwig('count');
-            $this->addFunctionToTwig('md5');
-            $this->addFunctionToTwig('auth', true);
-        }
-    }
+            $this->csrfField();
 
-    /**
-     * @param      $name
-     * @param bool $instance
-     */
-    public function addFunctionToTwig($name, $instance = false)
-    {
-        if ($instance) {
-            $$name = new \Twig_SimpleFunction(
-                    $name, function ($url = null, $false = null) {
-                return $this->$name($url, $false);
-            }
-            );
-        } else {
-            $$name = new \Twig_SimpleFunction(
-                    $name, function ($var) {
-                return $name($var);
-            }
-            );
         }
-
-        $this->getTwig()->addFunction($$name);
     }
 
     public function csrfProtection()
@@ -145,16 +122,29 @@ class Controller
     }
 
     /**
+     * @return string
+     */
+    public function csrfField()
+    {
+        $csrf = new \Twig_SimpleFunction('csrf_field', function () {
+            return "<input type='hidden' name='csrf_field' value='{$this->getDi()->getSubSession('csrf_token', 1)}'>";
+        });
+
+        $this->getTwig()->addFunction($csrf);
+    }
+
+    /**
      * @param      $path
      * @param      $module
      * @param null $data_array
+     *
      * @return string|void
      * Буферизируем вывод.
      */
     public function setView($path, $module, $data_array = null)
     {
-        $path             = str_replace('.', '/', $path);
-        $module           = str_replace('.', '/', $module);
+        $path   = str_replace('.', '/', $path);
+        $module = str_replace('.', '/', $module);
 
         ob_start();
         $this->render($path, $module, $data_array);
@@ -170,8 +160,8 @@ class Controller
      */
     public function render($path, $module = false, $data_array = null)
     {
-        $path             = str_replace('.', '/', $path);
-        $module           = str_replace('.', '/', $module);
+        $path   = str_replace('.', '/', $path);
+        $module = str_replace('.', '/', $module);
 
         $file = BP . $module . '/view/' . $path . '.php';
 
@@ -242,6 +232,21 @@ class Controller
     }
 
     /**
+     * @param $key
+     */
+    public function fileUpload($key)
+    {
+        if ($this->getDi()->isUploaded($key)) {
+            $uploadedFile = '/uploaded/' . substr(md5(microtime()), 0, 5) . $this->getDi()->getUpload($key, 'name');
+            $uploadPath   = Config::PUBLIC_PATH . $uploadedFile;
+            $this->setDataItem($key, APP_URL . $uploadedFile);
+            move_uploaded_file($this->getDi()->getUpload($key, 'tmp_name'), $uploadPath);
+        } else {
+            $this->setDataItem($key, $this->getDi()->getPost($key));
+        }
+    }
+
+    /**
      * Данные отображаемые, когда воспроизводится ошибка 404
      */
     public function errorPage()
@@ -269,13 +274,19 @@ class Controller
      * @param $key
      * @param $data
      */
-    public function setData($key, $data)
+    public function setDataItem($key, $data)
     {
         $this->data[$key] = $data;
     }
 
+    public function setData($array)
+    {
+        $this->data = $array;
+    }
+
     /**
      * @param $key
+     *
      * @return mixed
      */
     public function getDataItem($key)
