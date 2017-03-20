@@ -69,9 +69,9 @@ class Controller
     public function templateEngine($config)
     {
         if ($config == 'twig') {
-            $loader = new \Twig_Loader_Filesystem(BP . '/app/resources/twig/view');
+            $loader = new \Twig_Loader_Filesystem(BP . 'app/resources/twig/view');
             $this->setTwig(new \Twig_Environment($loader, [
-                'cache' => BP . '/app/resources/twig/compilation_cache',
+                'cache' => BP . 'app/resources/twig/compilation_cache',
                 'debug' => DEV,
             ]));
             $this->csrfField();
