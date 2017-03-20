@@ -192,4 +192,63 @@ class Controller
     {
         return $this->twig;
     }
+
+    /**
+     * @return mixed
+     */
+    public function validation()
+    {
+        return $this->container()->get('validation');
+    }
+
+    /**
+     * @param        $user
+     * @param        $res
+     * @param string $message
+     *
+     * @return mixed
+     */
+    public function login($user, $res, $message = 'Укажите верные данные')
+    {
+        return $this->container()->get('auth')->login($user, $res, $message);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function logout()
+    {
+        return $this->container()->get('auth')->logout();
+    }
+
+    /**
+     * @param $path
+     *
+     * @return mixed
+     */
+    public function redirect($path)
+    {
+        return $this->container()->get('redirect')->run($path);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return mixed
+     */
+    public function post($key)
+    {
+        return $this->container()->getPost($key);
+    }
+
+    /**
+     * @param      $object
+     * @param null $params
+     *
+     * @return mixed
+     */
+    public function new($object, $params = null)
+    {
+        return $this->container()->new($object, $params);
+    }
 }
