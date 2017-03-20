@@ -222,13 +222,19 @@ class Controller
     }
 
     /**
-     * @param $path
-     *
      * @return mixed
      */
-    public function redirect($path)
+    public function check()
     {
-        return $this->container()->get('redirect')->run($path);
+        return $this->container()->get('auth')->check();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function redirect()
+    {
+        return $this->container()->get('redirect');
     }
 
     /**
