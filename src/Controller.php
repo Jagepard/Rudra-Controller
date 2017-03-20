@@ -11,7 +11,7 @@
 
 namespace Rudra;
 
-use App\Config\Config;
+use App\Config;
 
 /**
  * Class Controller
@@ -25,38 +25,24 @@ class Controller
     /**
      * @var
      */
-    public static $sdi;
+    protected $container;
 
     /**
      * @var
-     */
-    public $di;
-
-    /**
-     * @var
-     * Для шаблонизатора
      */
     protected $twig;
 
     /**
      * @var
-     * Для данных передаваемых в $data_array
      */
     protected $data;
 
     /**
-     * @var
-     * Для экземпляра модели
+     * @param \Rudra\IContainer $container
      */
-    protected $model;
-
-    /**
-     * @param IContainer $di
-     * Здесь можно ввести дополнительные параметры при инициализации
-     */
-    public function init(IContainer $di)
+    public function init(IContainer $container)
     {
-        $this->setDi($di);
+        $this->container = $container;
         $this->csrfProtection();
         $this->templateEngine(Config::TE);
     }
@@ -82,224 +68,113 @@ class Controller
      */
     public function templateEngine($config)
     {
-        if ('twig' == $config) {
-            $loader = new \Twig_Loader_Filesystem(BP . '/app/Twig/view');
-
-            $this->setTwig(new \Twig_Environment(
-                $loader, array(
-                    'cache' => BP . '/vendor/twig/compilation_cache',
-                    'debug' => true,
-                )
-            ));
-
-            if (DEV) {
-                $this->getTwig()->addExtension(new \Twig_Extension_Debug());
-            }
-
+        if ($config == 'twig') {
+            $loader = new \Twig_Loader_Filesystem(BP . '/app/resources/twig/view');
+            $this->setTwig(new \Twig_Environment($loader, [
+                'cache' => BP . '/app/resources/twig/compilation_cache',
+                'debug' => DEV,
+            ]));
             $this->csrfField();
-
         }
     }
 
+    /**
+     * CSRF protection
+     */
     public function csrfProtection()
     {
-        /**
-         * CSRF protection
-         */
-        if (!isset($_SESSION)) {
-            session_start();
+        if (!isset($_SESSION)) session_start();
+
+        $this->container()->setSession('csrf_token', md5(uniqid(mt_rand(), true)), 'i++');
+
+        for ($i = 1; count($this->container()->getSession('csrf_token')) < 4; $i++) {
+            $this->container()->setSession('csrf_token', md5(uniqid(mt_rand(), true)), $i);
         }
 
-        $_SESSION['csrf_token'][] = md5(uniqid(mt_rand(), true));
-
-        for ($i = 1; count($_SESSION['csrf_token']) < 4; $i++) {
-            $_SESSION['csrf_token'][$i] = md5(uniqid(mt_rand(), true));
-        }
-
-        if (count($_SESSION['csrf_token']) > 4) {
+        if (count($this->container()->getSession('csrf_token')) > 4) {
             array_shift($_SESSION['csrf_token']);
         }
+
     }
 
     /**
      * @return string
      */
-    public function csrfField()
+    protected function csrfField()
     {
         $csrf = new \Twig_SimpleFunction('csrf_field', function () {
-            return "<input type='hidden' name='csrf_field' value='{$this->getDi()->getSubSession('csrf_token', 1)}'>";
+            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', 1)}'>";
         });
 
         $this->getTwig()->addFunction($csrf);
     }
 
     /**
-     * @param      $path
-     * @param      $module
-     * @param null $data_array
+     * @param       $path
+     * @param array $data
      *
-     * @return string|void
-     * Буферизируем вывод.
+     * @return string
      */
-    public function setView($path, $module, $data_array = null)
+    public function view($path, $data = [])
     {
         $path   = str_replace('.', '/', $path);
-        $module = str_replace('.', '/', $module);
-
         ob_start();
-        $this->render($path, $module, $data_array);
-        $pageContent = ob_get_clean();
+        $this->render($path, $data);
 
-        return $pageContent;
+        return ob_get_clean();
     }
 
     /**
-     * @param $path
-     * Подключает файл в зависимости от параметров,
-     * извлекает из массива $data_array переменные как ссылки
+     * @param       $path
+     * @param array $data
      */
-    public function render($path, $module = false, $data_array = null)
+    public function render($path, $data = [])
     {
         $path   = str_replace('.', '/', $path);
-        $module = str_replace('.', '/', $module);
+        $file   = BP . 'app/resources/tmpl/' . $path . '.tmpl.php';
 
-        $file = BP . $module . '/view/' . $path . '.php';
-
-        if (count($data_array)) {
-            extract($data_array, EXTR_REFS);
-        }
-
-        if (file_exists($file)) {
-            require $file;
-        }
+        if (count($data)) extract($data, EXTR_REFS);
+        if (file_exists($file)) require $file;
     }
 
     /**
-     * @param $value
-     * @param $param
-     * Обрабатывает дополнительные параметры передаваемые в url
-     * Используется только при авторутинге
+     * @param       $template
+     * @param array $params
      */
-    public function _404($value, $param = [])
+    public function twig($template, $params = [])
     {
-        /**
-         * Если есть элементы во входящем массиве $value
-         */
-        if (count($value)) {
-            /**
-             * Пока $i меньше count($value)
-             */
-            for ($i = 0; $i < count($value); $i++) {
-                /**
-                 * Проверяем наличие эмента $param[1][$i]
-                 * в котором должен находиться массив со списком
-                 * элементов разрешенных в url, если нет сразу
-                 * присваиваем $res[$i] = false;
-                 */
-                if (isset($param[0][$i])) {
-                    if (is_array($param[0][$i])) {
-                        /**
-                         * Если в адресной строке $value[$i] находится
-                         * элемент, который есть в массиве с белым списком, то
-                         * присваиваем элементу $res[$i] значение true
-                         * иначе false
-                         */
-                        if (in_array($value[$i], $param[0][$i])) {
-                            $res[$i] = true;
-                        } else {
-                            $res[$i] = false;
-                        }
-                    } elseif ($param[0][$i] == '*') {
-                        $res[$i] = true;
-                    }
-                } else {
-                    $res[$i] = false;
-                }
-            }
-
-            /**
-             * Если в массиве нет знвчения false, то завершаем работу метода,
-             * если есть, возвращаем "HTTP/1.1 404 Not Found" ниже по коду
-             */
-            if (!in_array(false, $res)) {
-                return;
-            }
-
-            header("HTTP/1.1 404 Not Found");
-            $this->errorPage();
-            exit();
-        }
-    }
-
-    /**
-     * @param $key
-     */
-    public function fileUpload($key)
-    {
-        if ($this->getDi()->isUploaded($key)) {
-            $uploadedFile = '/uploaded/' . substr(md5(microtime()), 0, 5) . $this->getDi()->getUpload($key, 'name');
-            $uploadPath   = Config::PUBLIC_PATH . $uploadedFile;
-            $this->setDataItem($key, APP_URL . $uploadedFile);
-            move_uploaded_file($this->getDi()->getUpload($key, 'tmp_name'), $uploadPath);
-        } else {
-            $this->setDataItem($key, $this->getDi()->getPost($key));
-        }
-    }
-
-    /**
-     * Данные отображаемые, когда воспроизводится ошибка 404
-     */
-    public function errorPage()
-    {
-        echo 'Нет такой страницы: <h1>«Ошибка 404»</h1>';
-    }
-
-    /**
-     * @param mixed $di
-     */
-    public function setDi($di)
-    {
-        $this->di = $di;
+        echo $this->getTwig()->render($template, $params);
     }
 
     /**
      * @return mixed
      */
-    public function getDi()
+    public function container()
     {
-        return $this->di;
+        return $this->container;
     }
 
     /**
-     * @param $key
-     * @param $data
+     * @param      $data
+     * @param null $key
      */
-    public function setDataItem($key, $data)
+    public function setData($data, $key = null)
     {
-        $this->data[$key] = $data;
-    }
-
-    public function setData($array)
-    {
-        $this->data = $array;
+        if (isset($key)) {
+            $this->data[$key] = $data;
+        } else {
+            $this->data = $data;
+        }
     }
 
     /**
-     * @param $key
+     * @param null $key
      *
      * @return mixed
      */
-    public function getDataItem($key)
+    public function getData($key = null)
     {
-        return $this->data[$key];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getData()
-    {
-        return $this->data;
+        return (isset($key)) ? $this->data[$key] : $this->data;
     }
 
     /**
@@ -317,21 +192,4 @@ class Controller
     {
         return $this->twig;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * @param mixed $model
-     */
-    public function setModel($model)
-    {
-        $this->model = $model;
-    }
-
 }
