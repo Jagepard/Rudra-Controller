@@ -38,6 +38,11 @@ class Controller
     protected $data;
 
     /**
+     * @var
+     */
+    protected $model;
+
+    /**
      * @param \Rudra\IContainer $container
      */
     public function init(IContainer $container)
@@ -210,23 +215,22 @@ class Controller
      */
     public function login($user, $res, $message = 'Укажите верные данные')
     {
-        return $this->container()->get('auth')->login($user, $res, $message);
+        $this->container()->get('auth')->login($user, $res, $message);
     }
 
-    /**
-     * @return mixed
-     */
     public function logout()
     {
-        return $this->container()->get('auth')->logout();
+        $this->container()->get('auth')->logout();
     }
 
-    /**
-     * @return mixed
-     */
     public function check()
     {
-        return $this->container()->get('auth')->check();
+        $this->container()->get('auth')->check();
+    }
+
+    public function auth()
+    {
+        $this->container()->get('auth')->auth();
     }
 
     /**
@@ -256,5 +260,56 @@ class Controller
     public function new($object, $params = null)
     {
         return $this->container()->new($object, $params);
+    }
+
+    /**
+     * @param string      $key
+     * @param string|null $subKey
+     */
+    public function unsetSession(string $key, string $subKey = null)
+    {
+        $this->container()->unsetSession($key, $subKey);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function pagination()
+    {
+        return $this->container()->get('pagination');
+    }
+
+    /**
+     * @param $value
+     */
+    public function setPagination($value)
+    {
+        $this->container()->set('pagination', new Pagination($value['id']), 'raw');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function model()
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param mixed $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @param string      $key
+     * @param string      $value
+     * @param string|null $subKey
+     */
+    public function setSession(string $key, string $value, string $subKey = null)
+    {
+        $this->container()->setSession($key, $value, $subKey);
     }
 }
