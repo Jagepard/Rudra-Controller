@@ -64,7 +64,7 @@ class Controller
     /**
      * Метод выполняется перед вызовом контроллера
      */
-    public function before()
+    public function before(): void
     {
 
     }
@@ -72,7 +72,7 @@ class Controller
     /**
      * Метод выполняется после вызова контроллера
      */
-    public function after()
+    public function after(): void
     {
 
     }
@@ -102,21 +102,20 @@ class Controller
             session_start();
         }
 
-        $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), 'i++');
-
-        for ($i = 1; count($this->container()->getSession('csrf_token')) < 4; $i++) {
-            $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), (string)$i);
-        }
-
-        if (count($this->container()->getSession('csrf_token')) > 4) {
-            array_shift($_SESSION['csrf_token']);
+        if ($this->container()->hasSession('csrf_token')) {
+            array_unshift($_SESSION['csrf_token'], md5(uniqid((string)mt_rand(), true)));
+            $this->container()->unsetSession('csrf_token', strval(count($this->container()->getSession('csrf_token')) - 1));
+        } else {
+            for ($i = 0; $i < 4; $i++) {
+                $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), 'increment');
+            }
         }
     }
 
     protected function csrfField(): void
     {
         $csrf = new Twig_SimpleFunction('csrf_field', function () {
-            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', '1')}'>";
+            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', '0')}'>";
         });
 
         $this->getTwig()->addFunction($csrf);
@@ -197,7 +196,7 @@ class Controller
     /**
      * @param Twig_Environment $twig
      */
-    public function setTwig(Twig_Environment $twig)
+    public function setTwig(Twig_Environment $twig): void
     {
         $this->twig = $twig;
     }
