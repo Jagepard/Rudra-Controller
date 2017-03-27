@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 /**
- * Date: 27.07.15
- * Time: 13:07
+ * Date: 27.03.17
+ * Time: 11:50
  *
  * @author    : Korotkov Danila <dankorot@gmail.com>
  * @copyright Copyright (c) 2016, Korotkov Danila
@@ -11,13 +13,17 @@
 
 namespace Rudra;
 
-use App\Config;
+
+use \Twig_Loader_Filesystem;
+use \Twig_Environment;
+use \Twig_SimpleFunction;
+
 
 /**
  * Class Controller
  *
  * @package Rudra
- *          Родительский класс для контроллеров
+ * Родительский класс для контроллеров
  */
 class Controller
 {
@@ -25,12 +31,12 @@ class Controller
     use ContainerTrait, AuthTrait;
 
     /**
-     * @var
+     * IContainer
      */
     protected $container;
 
     /**
-     * @var
+     * Twig_Environment
      */
     protected $twig;
 
@@ -45,13 +51,14 @@ class Controller
     protected $model;
 
     /**
-     * @param \Rudra\IContainer $container
+     * @param IContainer $container
+     * @param string     $templateEngine
      */
-    public function init(IContainer $container)
+    public function init(IContainer $container, string $templateEngine): void
     {
         $this->container = $container;
         $this->csrfProtection();
-        $this->templateEngine(Config::TE);
+        $this->templateEngine($templateEngine);
     }
 
     /**
@@ -73,14 +80,15 @@ class Controller
     /**
      * @param $config
      */
-    public function templateEngine($config)
+    public function templateEngine(string $config): void
     {
         if ($config == 'twig') {
-            $loader = new \Twig_Loader_Filesystem(BP . 'app/resources/twig/view');
-            $this->setTwig(new \Twig_Environment($loader, [
+            $loader = new Twig_Loader_Filesystem(BP . 'app/resources/twig/view');
+            $this->setTwig(new Twig_Environment($loader, [
                 'cache' => BP . 'app/resources/twig/compilation_cache',
                 'debug' => DEV,
             ]));
+
             $this->csrfField();
         }
     }
@@ -88,43 +96,41 @@ class Controller
     /**
      * CSRF protection
      */
-    public function csrfProtection()
+    public function csrfProtection(): void
     {
-        if (!isset($_SESSION)) session_start();
+        if (!isset($_SESSION)) {
+            session_start();
+        }
 
-        $this->container()->setSession('csrf_token', md5(uniqid(mt_rand(), true)), 'i++');
+        $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), 'i++');
 
         for ($i = 1; count($this->container()->getSession('csrf_token')) < 4; $i++) {
-            $this->container()->setSession('csrf_token', md5(uniqid(mt_rand(), true)), $i);
+            $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), (string)$i);
         }
 
         if (count($this->container()->getSession('csrf_token')) > 4) {
             array_shift($_SESSION['csrf_token']);
         }
-
     }
 
-    /**
-     * @return string
-     */
-    protected function csrfField()
+    protected function csrfField(): void
     {
-        $csrf = new \Twig_SimpleFunction('csrf_field', function () {
-            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', 1)}'>";
+        $csrf = new Twig_SimpleFunction('csrf_field', function () {
+            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', '1')}'>";
         });
 
         $this->getTwig()->addFunction($csrf);
     }
 
     /**
-     * @param       $path
-     * @param array $data
+     * @param string $path
+     * @param array  $data
      *
      * @return string
      */
-    public function view($path, $data = [])
+    public function view(string $path, array $data = []): string
     {
-        $path   = str_replace('.', '/', $path);
+        $path = str_replace('.', '/', $path);
         ob_start();
         $this->render($path, $data);
 
@@ -132,23 +138,27 @@ class Controller
     }
 
     /**
-     * @param       $path
-     * @param array $data
+     * @param string $path
+     * @param array  $data
      */
-    public function render($path, $data = [])
+    public function render(string $path, array $data = []): void
     {
-        $path   = str_replace('.', '/', $path);
-        $file   = BP . 'app/resources/tmpl/' . $path . '.tmpl.php';
+        $path = str_replace('.', '/', $path);
+        $file = BP . 'app/resources/tmpl/' . $path . '.tmpl.php';
 
-        if (count($data)) extract($data, EXTR_REFS);
-        if (file_exists($file)) require $file;
+        if (count($data)) {
+            extract($data, EXTR_REFS);
+        }
+        if (file_exists($file)) {
+            require $file;
+        }
     }
 
     /**
-     * @param       $template
-     * @param array $params
+     * @param string $template
+     * @param array  $params
      */
-    public function twig($template, $params = [])
+    public function twig(string $template, array $params = []): void
     {
         echo $this->getTwig()->render($template, $params);
     }
@@ -156,16 +166,16 @@ class Controller
     /**
      * @return mixed
      */
-    public function container()
+    public function container(): IContainer
     {
         return $this->container;
     }
 
     /**
-     * @param      $data
-     * @param null $key
+     * @param string      $data
+     * @param string|null $key
      */
-    public function setData($data, $key = null)
+    public function setData(string $data, ?string $key): void
     {
         if (isset($key)) {
             $this->data[$key] = $data;
@@ -175,43 +185,43 @@ class Controller
     }
 
     /**
-     * @param null $key
+     * @param string $key
      *
-     * @return mixed
+     * @return string|array
      */
-    public function getData($key = null)
+    public function getData(?string $key)
     {
         return (isset($key)) ? $this->data[$key] : $this->data;
     }
 
     /**
-     * @param mixed $twig
+     * @param Twig_Environment $twig
      */
-    public function setTwig($twig)
+    public function setTwig(Twig_Environment $twig)
     {
         $this->twig = $twig;
     }
 
     /**
-     * @return mixed
+     * @return Twig_Environment
      */
-    public function getTwig()
+    public function getTwig(): Twig_Environment
     {
         return $this->twig;
     }
 
     /**
-     * @return mixed
+     * @return Model
      */
-    public function model()
+    public function model(): Model
     {
         return $this->model;
     }
 
     /**
-     * @param mixed $model
+     * @param Model $model
      */
-    public function setModel($model)
+    public function setModel(Model $model): void
     {
         $this->model = $model;
     }
