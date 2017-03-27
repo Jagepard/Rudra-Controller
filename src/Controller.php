@@ -201,95 +201,6 @@ class Controller
     /**
      * @return mixed
      */
-    public function validation()
-    {
-        return $this->container()->get('validation');
-    }
-
-    /**
-     * @param        $user
-     * @param        $res
-     * @param string $message
-     *
-     * @return mixed
-     */
-    public function login($user, $res, $message = 'Укажите верные данные')
-    {
-        $this->container()->get('auth')->login($user, $res, $message);
-    }
-
-    public function logout()
-    {
-        $this->container()->get('auth')->logout();
-    }
-
-    public function check()
-    {
-        $this->container()->get('auth')->check();
-    }
-
-    public function auth()
-    {
-        $this->container()->get('auth')->auth();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function redirect()
-    {
-        return $this->container()->get('redirect');
-    }
-
-    /**
-     * @param $key
-     *
-     * @return mixed
-     */
-    public function post($key)
-    {
-        return $this->container()->getPost($key);
-    }
-
-    /**
-     * @param      $object
-     * @param null $params
-     *
-     * @return mixed
-     */
-    public function new($object, $params = null)
-    {
-        return $this->container()->new($object, $params);
-    }
-
-    /**
-     * @param string      $key
-     * @param string|null $subKey
-     */
-    public function unsetSession(string $key, string $subKey = null)
-    {
-        $this->container()->unsetSession($key, $subKey);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function pagination()
-    {
-        return $this->container()->get('pagination');
-    }
-
-    /**
-     * @param $value
-     */
-    public function setPagination($value)
-    {
-        $this->container()->set('pagination', new Pagination($value['id']), 'raw');
-    }
-
-    /**
-     * @return mixed
-     */
     public function model()
     {
         return $this->model;
@@ -301,15 +212,5 @@ class Controller
     public function setModel($model)
     {
         $this->model = $model;
-    }
-
-    /**
-     * @param string      $key
-     * @param string      $value
-     * @param string|null $subKey
-     */
-    public function setSession(string $key, string $value, string $subKey = null)
-    {
-        $this->container()->setSession($key, $value, $subKey);
     }
 }
