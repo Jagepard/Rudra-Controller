@@ -175,7 +175,7 @@ class Controller
      * @param string      $data
      * @param string|null $key
      */
-    public function setData(string $data, ?string $key): void
+    public function setData(string $data, string $key = null): void
     {
         if (isset($key)) {
             $this->data[$key] = $data;
@@ -189,7 +189,7 @@ class Controller
      *
      * @return string|array
      */
-    public function getData(?string $key)
+    public function getData(string $key = null)
     {
         return (isset($key)) ? $this->data[$key] : $this->data;
     }
