@@ -22,6 +22,8 @@ use App\Config;
 class Controller
 {
 
+    use ContainerTrait, AuthTrait;
+
     /**
      * @var
      */
