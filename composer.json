@@ -21,7 +21,9 @@
         "skype": "jagepard.ru"
     },
     "require"     : {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "rudra/container": "^1.0",
+        "rudra/auth": "dev-master"
     },
     "require-dev" : {
         "codeception/codeception": "*"
