@@ -25,7 +25,7 @@ use \Twig_SimpleFunction;
  * @package Rudra
  * Родительский класс для контроллеров
  */
-class Controller
+class Controller implements IController
 {
 
     use ContainerTrait, AuthTrait;
@@ -64,7 +64,7 @@ class Controller
     /**
      * Метод выполняется перед вызовом контроллера
      */
-    public function before(): void
+    public function before()
     {
 
     }
@@ -72,7 +72,7 @@ class Controller
     /**
      * Метод выполняется после вызова контроллера
      */
-    public function after(): void
+    public function after()
     {
 
     }
