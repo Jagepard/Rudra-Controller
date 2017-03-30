@@ -54,7 +54,7 @@ class Controller implements IController
      * @param IContainer $container
      * @param string     $templateEngine
      */
-    public function init(IContainer $container, string $templateEngine): void
+    public function init(IContainer $container, string $templateEngine)
     {
         $this->container = $container;
         $this->csrfProtection();
@@ -218,10 +218,10 @@ class Controller implements IController
     }
 
     /**
-     * @param Model $model
+     * @param string $modelName
      */
-    public function setModel(Model $model): void
+    public function setModel(string $modelName): void
     {
-        $this->model = $model;
+        $this->model = $this->container()->new($modelName);
     }
 }
