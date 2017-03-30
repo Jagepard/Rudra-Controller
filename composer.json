@@ -28,7 +28,7 @@
         "rudra/model": "dev-master"
     },
     "require-dev" : {
-        "codeception/codeception": "*"
+        "satooshi/php-coveralls": "dev-master"
     },
     "autoload"    : {
         "psr-4": {
