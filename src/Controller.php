@@ -173,10 +173,10 @@ class Controller implements IController
     }
 
     /**
-     * @param string      $data
+     * @param             $data
      * @param string|null $key
      */
-    public function setData(string $data, string $key = null): void
+    public function setData($data, string $key = null): void
     {
         if (isset($key)) {
             $this->data[$key] = $data;
