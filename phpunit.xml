@@ -7,7 +7,7 @@
          bootstrap="src/tests/bootstrap.php"
 >
     <testsuites>
-        <testsuite name="Rudra-Annotations">
+        <testsuite name="Rudra-Controller">
             <directory>src/tests</directory>
         </testsuite>
     </testsuites>
@@ -23,7 +23,6 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
             <exclude>
-                <file>./src/tests/stub/Test.php</file>
                 <file>./src/tests/bootstrap.php</file>
             </exclude>
         </whitelist>
