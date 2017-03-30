@@ -69,7 +69,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testTwig()
     {
-        $this->assertEquals('"Hello World!!!"', $this->controller()->twig('index.html.twig', ['title' => 'title']));
+        $this->assertNull($this->controller()->twig('index.html.twig', ['title' => 'title']));
     }
 
     /**
