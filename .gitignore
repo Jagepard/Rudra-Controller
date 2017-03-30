@@ -5,3 +5,4 @@
 /composer.lock
 /src/index.php
 /src/tests/build/
+/app/resources/twig/compilation_cache/
