@@ -13,6 +13,11 @@ declare(strict_types = 1);
 
 namespace Rudra;
 
+/**
+ * Interface IController
+ *
+ * @package Rudra
+ */
 interface IController
 {
 
@@ -20,7 +25,7 @@ interface IController
      * @param IContainer $container
      * @param string     $templateEngine
      */
-    public function init(IContainer $container, string $templateEngine): void;
+    public function init(IContainer $container, string $templateEngine);
 
     /**
      * Метод выполняется перед вызовом контроллера
