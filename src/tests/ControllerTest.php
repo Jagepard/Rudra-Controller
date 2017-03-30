@@ -12,7 +12,15 @@ declare(strict_types = 1);
  *
  * phpunit src/tests/ControllerTest --coverage-html src/tests/coverage-html
  */
-class ControllerTest
+
+
+use PHPUnit\Framework\TestCase as PHPUnit_Framework_TestCase;
+
+
+/**
+ * Class ControllerTest
+ */
+class ControllerTest extends PHPUnit_Framework_TestCase
 {
 
 }
