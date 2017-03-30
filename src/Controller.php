@@ -28,7 +28,7 @@ use \Twig_SimpleFunction;
 class Controller implements IController
 {
 
-    use ContainerTrait, AuthTrait;
+    use ContainerTrait, AuthTrait, DataTrait;
 
     /**
      * IContainer
@@ -39,11 +39,6 @@ class Controller implements IController
      * Twig_Environment
      */
     protected $twig;
-
-    /**
-     * @var
-     */
-    protected $data;
 
     /**
      * @var
@@ -168,29 +163,6 @@ class Controller implements IController
     public function container(): IContainer
     {
         return $this->container;
-    }
-
-    /**
-     * @param             $data
-     * @param string|null $key
-     */
-    public function setData($data, string $key = null): void
-    {
-        if (isset($key)) {
-            $this->data[$key] = $data;
-        } else {
-            $this->data = $data;
-        }
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return string|array
-     */
-    public function getData(string $key = null)
-    {
-        return (isset($key)) ? $this->data[$key] : $this->data;
     }
 
     /**
