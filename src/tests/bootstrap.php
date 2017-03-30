@@ -1,7 +1,8 @@
-<?
+<?php
 
 declare(strict_types = 1);
 
+define('DEV', true);
 define('BP', dirname(dirname(__DIR__)) . '/');
 
 require_once BP . 'vendor/autoload.php';
