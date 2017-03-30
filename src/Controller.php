@@ -115,7 +115,7 @@ class Controller implements IController
     protected function csrfField(): void
     {
         $csrf = new Twig_SimpleFunction('csrf_field', function () {
-            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', '0')}'>";
+            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', '0')}'>";// @codeCoverageIgnore
         });
 
         $this->getTwig()->addFunction($csrf);
@@ -156,10 +156,12 @@ class Controller implements IController
     /**
      * @param string $template
      * @param array  $params
+     *
+     * @return string
      */
-    public function twig(string $template, array $params = []): void
+    public function twig(string $template, array $params = []): string
     {
-        echo $this->getTwig()->render($template, $params);
+        return $this->getTwig()->render($template, $params);
     }
 
     /**
