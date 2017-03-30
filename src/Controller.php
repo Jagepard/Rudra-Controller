@@ -156,12 +156,10 @@ class Controller implements IController
     /**
      * @param string $template
      * @param array  $params
-     *
-     * @return string
      */
-    public function twig(string $template, array $params = []): string
+    public function twig(string $template, array $params = []): void
     {
-        return $this->getTwig()->render($template, $params);
+        echo $this->getTwig()->render($template, $params);
     }
 
     /**
