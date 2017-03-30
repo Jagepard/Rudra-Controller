@@ -24,7 +24,8 @@
         "php": ">=7.1",
         "rudra/container": "^1.0",
         "rudra/auth": "dev-master",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "rudra/model": "dev-master"
     },
     "require-dev" : {
         "codeception/codeception": "*"
