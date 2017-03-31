@@ -1,7 +1,7 @@
 {
     "name"        : "rudra/controller",
     "description" : "The Rudra framework",
-    "version"     : "1.0.0-dev",
+    "version"     : "dev-master",
     "type"        : "library",
     "keywords"    : [
         "rudra",
@@ -34,5 +34,6 @@
         "psr-4": {
             "Rudra\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
