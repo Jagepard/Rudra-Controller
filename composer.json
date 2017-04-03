@@ -22,9 +22,9 @@
     "require"           : {
         "php"             : ">=7.1",
         "twig/twig"       : "~1.0",
-        "rudra/model"     : "1.*",
         "rudra/container" : "1.*",
-        "rudra/auth"      : "1.*"
+        "rudra/auth"      : "1.*",
+        "rudra/model": "dev-master"
     },
     "require-dev"       : {
         "satooshi/php-coveralls" : "dev-master"
@@ -34,8 +34,10 @@
             "Rudra\\" : "src/"
         }
     },
+    "replace": {"rudra/controller": "self.version"},
     "minimum-stability" : "dev",
     "config"            : {
-        "optimize-autoloader" : true
+        "optimize-autoloader" : true,
+        "prefer-stable"       : true
     }
 }
