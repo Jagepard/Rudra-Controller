@@ -14,18 +14,18 @@ declare(strict_types = 1);
 namespace Rudra;
 
 /**
- * Interface IController
+ * Interface ControllerInterface
  *
  * @package Rudra
  */
-interface IController
+interface ControllerInterface
 {
 
     /**
-     * @param IContainer $container
+     * @param ContainerInterface $container
      * @param string     $templateEngine
      */
-    public function init(IContainer $container, string $templateEngine);
+    public function init(ContainerInterface $container, string $templateEngine);
 
     /**
      * Метод выполняется перед вызовом контроллера
@@ -64,5 +64,5 @@ interface IController
     /**
      * @return mixed
      */
-    public function container(): IContainer;
+    public function container(): ContainerInterface;
 }

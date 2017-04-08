@@ -14,9 +14,9 @@ declare(strict_types = 1);
  */
 
 use PHPUnit\Framework\TestCase as PHPUnit_Framework_TestCase;
-use Rudra\IContainer;
+use Rudra\ContainerInterface;
 use Rudra\Container;
-use Rudra\IController;
+use Rudra\ControllerInterface;
 use Rudra\Controller;
 use Rudra\Model;
 
@@ -27,19 +27,19 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var IContainer
+     * @var ContainerInterface
      */
     protected $container;
 
     /**
-     * @var IController
+     * @var ControllerInterface
      */
     protected $controller;
 
     protected function setUp(): void
     {
         $this->container = Container::app();
-        $this->container->setBinding(IContainer::class, Container::$app);
+        $this->container->setBinding(ContainerInterface::class, Container::$app);
         $this->controller = new Controller();
         $this->controller->before();
         $this->controller->init($this->container, 'twig');
@@ -51,7 +51,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testInit()
     {
-        $this->assertInstanceOf(IContainer::class, $this->controller()->container());
+        $this->assertInstanceOf(ContainerInterface::class, $this->controller()->container());
         $this->assertTrue($this->container()->hasSession('csrf_token'));
         $this->controller()->csrfProtection();
     }
@@ -98,17 +98,17 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return IController
+     * @return ControllerInterface
      */
-    public function controller(): IController
+    public function controller(): ControllerInterface
     {
         return $this->controller;
     }
 
     /**
-     * @return IContainer
+     * @return ContainerInterface
      */
-    public function container(): IContainer
+    public function container(): ContainerInterface
     {
         return $this->container;
     }

@@ -25,13 +25,13 @@ use \Twig_SimpleFunction;
  * @package Rudra
  * Родительский класс для контроллеров
  */
-class Controller implements IController
+class Controller implements ControllerInterface
 {
 
     use ContainerTrait, AuthTrait, DataTrait;
 
     /**
-     * IContainer
+     * ContainerInterface
      */
     protected $container;
 
@@ -46,10 +46,10 @@ class Controller implements IController
     protected $model;
 
     /**
-     * @param IContainer $container
+     * @param ContainerInterface $container
      * @param string     $templateEngine
      */
-    public function init(IContainer $container, string $templateEngine)
+    public function init(ContainerInterface $container, string $templateEngine)
     {
         $this->container = $container;
         $this->csrfProtection();
@@ -160,7 +160,7 @@ class Controller implements IController
     /**
      * @return mixed
      */
-    public function container(): IContainer
+    public function container(): ContainerInterface
     {
         return $this->container;
     }
