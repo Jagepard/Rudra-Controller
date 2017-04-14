@@ -4,7 +4,9 @@
     "type"              : "library",
     "keywords"          : [
         "rudra",
-        "controller"
+        "controller",
+        "mvc-pattern",
+        "mvc"
     ],
     "license"           : "MIT",
     "authors"           : [
