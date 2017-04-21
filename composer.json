@@ -26,7 +26,8 @@
         "twig/twig"       : "~1.0",
         "rudra/container" : "self.version",
         "rudra/auth"      : "self.version",
-        "rudra/model"     : "self.version"
+        "rudra/model"     : "self.version",
+        "rudra/router"    : "self.version"
     },
     "require-dev"       : {
         "satooshi/php-coveralls" : "dev-master"
