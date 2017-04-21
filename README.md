@@ -6,5 +6,7 @@
 [![Latest Stable Version](https://poser.pugx.org/rudra/controller/v/stable)](https://packagist.org/packages/rudra/controller)
 [![Total Downloads](https://poser.pugx.org/rudra/controller/downloads)](https://packagist.org/packages/rudra/controller)
 [![License](https://poser.pugx.org/rudra/controller/license)](https://packagist.org/packages/rudra/controller)
+
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/e031e7c6-0c4f-498e-ae5e-18dec157ee2d/big.png)](https://insight.sensiolabs.com/projects/e031e7c6-0c4f-498e-ae5e-18dec157ee2d)
 # Rudra-Controller
 Контроллер
