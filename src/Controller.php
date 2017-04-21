@@ -28,7 +28,9 @@ use \Twig_SimpleFunction;
 class Controller implements ControllerInterface
 {
 
-    use ContainerTrait, AuthTrait, DataTrait;
+    use ContainerTrait;
+    use AuthTrait;
+    use DataTrait;
 
     /**
      * ContainerInterface
