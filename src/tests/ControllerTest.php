@@ -38,6 +38,21 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
     protected function setUp(): void
     {
+        $_FILES = [
+            'upload' =>
+                ['name'     => ['img' => 'demo.png'],
+                 'type'     => ['img' => 'image/png'],
+                 'tmp_name' => ['img' => '/tmp/phpiQuDkR'],
+                 'error'    => ['img' => 0],
+                 'size'     => ['img' => 9584],
+                ]
+        ];
+
+        $_POST = [
+            'img'   => 'http://example.com/images/img.png',
+            'image' => 'http://example.com/images/image.png',
+        ];
+
         $this->container = Container::app();
         $this->container->setBinding(ContainerInterface::class, Container::$app);
         $this->controller = new Controller();
@@ -87,14 +102,26 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     public function testData()
     {
         $this->controller()->setData([
-            'first'  => 'one',
-        ]);
+                'first' => 'one',
+            ]
+        );
 
         $this->controller()->setData('two', 'second');
 
         $this->assertEquals('one', $this->controller()->getData('first'));
         $this->assertEquals('two', $this->controller()->getData('second'));
         $this->assertArrayHasKey('first', $this->controller()->getData());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testFileUpload()
+    {
+        define('APP_URL', 'http://example.com');
+        $this->controller()->fileUpload('img', BP . 'app/storage');
+        $this->assertTrue($this->container()->isUploaded('img'));
+        $this->assertEquals($this->container()->getPost('image'), $this->controller()->fileUpload('image', BP . 'app/storage'));
     }
 
     /**
