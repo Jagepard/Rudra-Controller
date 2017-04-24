@@ -51,14 +51,15 @@ trait ControllerTrait
 
     /**
      * @param $key
+     * @param $path
      *
      * @return string
      */
-    public function fileUpload($key)
+    public function fileUpload($key, $path)
     {
         if ($this->container()->isUploaded($key)) {
             $uploadedFile = '/uploaded/' . substr(md5(microtime()), 0, 5) . $this->container()->getUpload($key, 'name');
-            $uploadPath   = Config::PUBLIC_PATH . $uploadedFile;
+            $uploadPath   = $path . $uploadedFile;
             move_uploaded_file($this->container()->getUpload($key, 'tmp_name'), $uploadPath);
 
             return APP_URL . $uploadedFile;
