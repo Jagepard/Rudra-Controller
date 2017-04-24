@@ -14,11 +14,11 @@ declare(strict_types = 1);
 namespace Rudra;
 
 /**
- * Class DataTrait
+ * Class ControllerTrait
  *
  * @package Rudra
  */
-trait DataTrait
+trait ControllerTrait
 {
 
     /**
@@ -47,5 +47,23 @@ trait DataTrait
     public function getData(string $key = null)
     {
         return (isset($key)) ? $this->data[$key] : $this->data;
+    }
+
+    /**
+     * @param $key
+     *
+     * @return string
+     */
+    public function fileUpload($key)
+    {
+        if ($this->container()->isUploaded($key)) {
+            $uploadedFile = '/uploaded/' . substr(md5(microtime()), 0, 5) . $this->container()->getUpload($key, 'name');
+            $uploadPath   = Config::PUBLIC_PATH . $uploadedFile;
+            move_uploaded_file($this->container()->getUpload($key, 'tmp_name'), $uploadPath);
+
+            return APP_URL . $uploadedFile;
+        }
+
+        return $this->container()->getPost($key);
     }
 }
