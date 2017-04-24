@@ -30,7 +30,7 @@ class Controller implements ControllerInterface
 
     use ContainerTrait;
     use AuthTrait;
-    use DataTrait;
+    use ControllerTrait;
     use RouterMiddlewareTrait;
 
     /**
