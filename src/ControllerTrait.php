@@ -44,7 +44,7 @@ trait ControllerTrait
      *
      * @return string|array
      */
-    public function getData(string $key = null)
+    public function data(string $key = null)
     {
         return (isset($key)) ? $this->data[$key] : $this->data;
     }
