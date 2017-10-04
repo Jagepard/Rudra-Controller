@@ -40,6 +40,19 @@ trait ControllerTrait
     }
 
     /**
+     * @param             $data
+     * @param string|null $key
+     */
+    public function addData($data, string $key = null): void
+    {
+        if (isset($key)) {
+            $this->data[$key] = $data;
+        } else {
+            $this->data = array_merge($this->data, $data);
+        }
+    }
+
+    /**
      * @param string $key
      *
      * @return string|array
