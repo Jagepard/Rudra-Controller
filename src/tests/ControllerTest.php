@@ -107,12 +107,14 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         );
 
         $this->controller()->setData('two', 'second');
+        $this->controller()->setData(['first' => 'one'], 'array');
 
         $this->assertEquals('one', $this->controller()->data('first'));
         $this->assertEquals('two', $this->controller()->data('second'));
         $this->assertArrayHasKey('first', $this->controller()->data());
         $this->assertTrue($this->controller()->hasData('first'));
         $this->assertTrue($this->controller()->hasData('second'));
+        $this->assertTrue($this->controller()->hasData('array', 'first'));
     }
 
     /**
