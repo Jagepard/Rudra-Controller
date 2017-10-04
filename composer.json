@@ -27,7 +27,8 @@
         "rudra/container" : "self.version",
         "rudra/auth"      : "self.version",
         "rudra/model"     : "self.version",
-        "rudra/router"    : "self.version"
+        "rudra/router"    : "self.version",
+        "maximebf/debugbar" : "1.*"
     },
     "require-dev"       : {
         "satooshi/php-coveralls" : "dev-master"
