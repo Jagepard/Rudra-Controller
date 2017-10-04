@@ -55,6 +55,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
         $this->container = Container::app();
         $this->container->setBinding(ContainerInterface::class, Container::$app);
+        $this->container->set('debugbar', 'DebugBar\StandardDebugBar');
         $this->controller = new Controller();
         $this->controller->before();
         $this->controller->init($this->container, 'twig');
