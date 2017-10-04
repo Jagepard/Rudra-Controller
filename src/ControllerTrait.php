@@ -50,6 +50,16 @@ trait ControllerTrait
     }
 
     /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasData(string $key): bool
+    {
+        return isset($this->data[$key]);
+    }
+
+    /**
      * @param $key
      * @param $path
      *
