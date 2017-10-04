@@ -51,11 +51,16 @@ trait ControllerTrait
 
     /**
      * @param string $key
+     * @param string $arrayKey
      *
      * @return bool
      */
-    public function hasData(string $key): bool
+    public function hasData(string $key, string $arrayKey = null): bool
     {
+        if (isset($arrayKey)) {
+            return isset($this->data[$key][$arrayKey]);
+        }
+
         return isset($this->data[$key]);
     }
 
