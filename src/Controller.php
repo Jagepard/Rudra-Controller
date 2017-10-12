@@ -50,9 +50,9 @@ class Controller implements ControllerInterface
 
     /**
      * @param ContainerInterface $container
-     * @param string     $templateEngine
+     * @param array     $templateEngine
      */
-    public function init(ContainerInterface $container, string $templateEngine)
+    public function init(ContainerInterface $container, array $templateEngine)
     {
         $this->container = $container;
         $this->csrfProtection();
@@ -76,14 +76,14 @@ class Controller implements ControllerInterface
     }
 
     /**
-     * @param $config
+     * @param array $config
      */
-    public function templateEngine(string $config): void
+    public function templateEngine(array $config): void
     {
-        if ($config == 'twig') {
-            $loader = new Twig_Loader_Filesystem(BP . 'app/resources/twig/view');
+        if ($config['engine'] == 'twig') {
+            $loader = new Twig_Loader_Filesystem(BP . $config['view.path']);
             $this->setTwig(new Twig_Environment($loader, [
-                'cache' => BP . 'app/resources/twig/compilation_cache',
+                'cache' => BP . $config['cache.path'],
                 'debug' => DEV,
             ]));
 
