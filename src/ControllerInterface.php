@@ -23,9 +23,9 @@ interface ControllerInterface
 
     /**
      * @param ContainerInterface $container
-     * @param string     $templateEngine
+     * @param array     $templateEngine
      */
-    public function init(ContainerInterface $container, string $templateEngine);
+    public function init(ContainerInterface $container, array $templateEngine);
 
     /**
      * Метод выполняется перед вызовом контроллера
@@ -40,7 +40,7 @@ interface ControllerInterface
     /**
      * @param $config
      */
-    public function templateEngine(string $config): void;
+    public function templateEngine(array $config): void;
 
     /**
      * CSRF protection
