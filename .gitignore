@@ -1,5 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 /vendor/
 /composer.lock
-/src/tests/build/
 /app/resources/twig/compilation_cache/
+/tests/build/

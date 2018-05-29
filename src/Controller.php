@@ -1,62 +1,66 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
- * Date: 27.03.17
- * Time: 11:50
- *
  * @author    : Korotkov Danila <dankorot@gmail.com>
- * @copyright Copyright (c) 2016, Korotkov Danila
+ * @copyright Copyright (c) 2018, Korotkov Danila
  * @license   http://www.gnu.org/licenses/gpl.html GNU GPLv3.0
  */
 
 namespace Rudra;
 
-
-use \Twig_Loader_Filesystem;
 use \Twig_Environment;
 use \Twig_SimpleFunction;
-
+use \Twig_Loader_Filesystem;
+use Rudra\ExternalTraits\AuthTrait;
+use Rudra\ExternalTraits\ContainerTrait;
+use Rudra\ExternalTraits\ControllerTrait;
+use Rudra\ExternalTraits\RouterMiddlewareTrait;
+use Rudra\Interfaces\ContainerInterface;
+use Rudra\Interfaces\ControllerInterface;
 
 /**
  * Class Controller
- *
  * @package Rudra
+ *
  * Родительский класс для контроллеров
  */
 class Controller implements ControllerInterface
 {
 
-    use ContainerTrait;
     use AuthTrait;
+    use ContainerTrait;
     use ControllerTrait;
     use RouterMiddlewareTrait;
 
+    /**
+     * @var string
+     */
+    protected $env;
+    /**
+     * Twig_Environment
+     */
+    protected $twig;
+    /**
+     * @var
+     */
+    protected $model;
     /**
      * ContainerInterface
      */
     protected $container;
 
     /**
-     * Twig_Environment
-     */
-    protected $twig;
-
-    /**
-     * @var
-     */
-    protected $model;
-
-    /**
      * @param ContainerInterface $container
-     * @param array     $templateEngine
+     * @param array              $template
+     * @return mixed|void
      */
-    public function init(ContainerInterface $container, array $templateEngine)
+    public function init(ContainerInterface $container, array $template)
     {
         $this->container = $container;
         $this->csrfProtection();
-        $this->templateEngine($templateEngine);
+        $this->template($template);
     }
 
     /**
@@ -78,13 +82,13 @@ class Controller implements ControllerInterface
     /**
      * @param array $config
      */
-    public function templateEngine(array $config): void
+    public function template(array $config): void
     {
         if ($config['engine'] == 'twig') {
             $loader = new Twig_Loader_Filesystem(BP . $config['view.path']);
             $this->setTwig(new Twig_Environment($loader, [
-                'cache' => BP . $config['cache.path'],
-                'debug' => DEV,
+                'cache' => $config['bp'] . $config['cache.path'],
+                'debug' => ($config['env'] == 'development') ? true : false,
             ]));
 
             $this->csrfField();
@@ -96,17 +100,16 @@ class Controller implements ControllerInterface
      */
     public function csrfProtection(): void
     {
-        if (!isset($_SESSION)) {
-            session_start();
-        }
+        isset($_SESSION) ?: session_start();
 
         if ($this->container()->hasSession('csrf_token')) {
             array_unshift($_SESSION['csrf_token'], md5(uniqid((string)mt_rand(), true)));
             $this->container()->unsetSession('csrf_token', strval(count($this->container()->getSession('csrf_token')) - 1));
-        } else {
-            for ($i = 0; $i < 4; $i++) {
-                $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), 'increment');
-            }
+            return;
+        }
+
+        for ($i = 0; $i < 4; $i++) {
+            $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), 'increment');
         }
     }
 
@@ -154,18 +157,13 @@ class Controller implements ControllerInterface
     /**
      * @param string $template
      * @param array  $params
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function twig(string $template, array $params = []): void
     {
         echo $this->getTwig()->render($template, $params);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function container(): ContainerInterface
-    {
-        return $this->container;
     }
 
     /**
@@ -185,18 +183,10 @@ class Controller implements ControllerInterface
     }
 
     /**
-     * @return Model
+     * @return mixed
      */
-    public function model(): Model
+    public function container(): ContainerInterface
     {
-        return $this->model;
-    }
-
-    /**
-     * @param string $modelName
-     */
-    public function setModel(string $modelName): void
-    {
-        $this->model = $this->container()->new($modelName);
+        return $this->container;
     }
 }
