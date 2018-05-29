@@ -8,7 +8,7 @@
 >
     <testsuites>
         <testsuite name="Rudra-Controller">
-            <directory>src/tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
     <logging>

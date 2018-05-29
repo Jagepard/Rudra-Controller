@@ -125,7 +125,6 @@ class Controller implements ControllerInterface
     /**
      * @param string $path
      * @param array  $data
-     *
      * @return string
      */
     public function view(string $path, array $data = []): string
