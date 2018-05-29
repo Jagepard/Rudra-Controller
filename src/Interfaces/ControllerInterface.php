@@ -1,21 +1,17 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
- * Date: 28.03.17
- * Time: 16:08
- *
  * @author    : Korotkov Danila <dankorot@gmail.com>
- * @copyright Copyright (c) 2016, Korotkov Danila
+ * @copyright Copyright (c) 2018, Korotkov Danila
  * @license   http://www.gnu.org/licenses/gpl.html GNU GPLv3.0
  */
 
-namespace Rudra;
+namespace Rudra\Interfaces;
 
 /**
  * Interface ControllerInterface
- *
  * @package Rudra
  */
 interface ControllerInterface
@@ -23,9 +19,10 @@ interface ControllerInterface
 
     /**
      * @param ContainerInterface $container
-     * @param array     $templateEngine
+     * @param array              $template
+     * @return mixed
      */
-    public function init(ContainerInterface $container, array $templateEngine);
+    public function init(ContainerInterface $container, array $template);
 
     /**
      * Метод выполняется перед вызовом контроллера
@@ -40,7 +37,7 @@ interface ControllerInterface
     /**
      * @param $config
      */
-    public function templateEngine(array $config): void;
+    public function template(array $config): void;
 
     /**
      * CSRF protection
@@ -60,9 +57,4 @@ interface ControllerInterface
      * @param array  $data
      */
     public function render(string $path, array $data = []): void;
-
-    /**
-     * @return mixed
-     */
-    public function container(): ContainerInterface;
 }

@@ -1,6 +1,6 @@
 {
     "name"              : "rudra/controller",
-    "description"       : "The Rudra framework",
+    "description"       : "Rudra framework",
     "type"              : "library",
     "keywords"          : [
         "rudra",
@@ -8,7 +8,7 @@
         "mvc-pattern",
         "mvc"
     ],
-    "license"           : "MIT",
+    "license"           : "GPL-3.0-or-later",
     "authors"           : [
         {
             "name"     : "Danila Korotkov (Jagepard)",
@@ -26,17 +26,20 @@
         "twig/twig"         : "~1.0",
         "rudra/container"   : "self.version",
         "rudra/auth"        : "self.version",
-        "rudra/model"       : "self.version",
         "rudra/router"      : "self.version",
-        "maximebf/debugbar" : "1.*",
-        "phpunit/phpunit"   : "^6.2"
+        "maximebf/debugbar" : "1.*"
     },
     "require-dev"       : {
-        "satooshi/php-coveralls" : "dev-master"
+        "phpunit/phpunit": "^7"
     },
     "autoload"          : {
         "psr-4" : {
             "Rudra\\" : "src/"
+        }
+    },
+    "autoload-dev" : {
+        "psr-4": {
+            "Rudra\\Tests\\" : "tests/"
         }
     },
     "minimum-stability" : "dev",

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Date: 28.03.17
@@ -13,12 +13,13 @@ declare(strict_types = 1);
  * phpunit src/tests/ControllerTest --coverage-html src/tests/coverage-html
  */
 
-use PHPUnit\Framework\TestCase as PHPUnit_Framework_TestCase;
-use Rudra\ContainerInterface;
+namespace Rudra\Tests;
+
 use Rudra\Container;
-use Rudra\ControllerInterface;
 use Rudra\Controller;
-use Rudra\Model;
+use Rudra\Interfaces\ContainerInterface;
+use Rudra\Interfaces\ControllerInterface;
+use PHPUnit\Framework\TestCase as PHPUnit_Framework_TestCase;
 
 /**
  * Class ControllerTest
@@ -38,6 +39,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
     protected function setUp(): void
     {
+        define('DEV', true);
+        define('BP', dirname(__DIR__) . '/');
+
         $_FILES = [
             'upload' =>
                 ['name'     => ['img' => 'demo.png'],
@@ -59,8 +63,10 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->controller = new Controller();
         $this->controller->before();
         $this->controller->init($this->container, [
-            'engine' => 'twig',
-            'view.path' => 'app/resources/twig/view',
+            'bp'         => dirname(__DIR__) . '/',
+            'env'        => 'development',
+            'engine'     => 'twig',
+            'view.path'  => 'app/resources/twig/view',
             'cache.path' => 'app/resources/twig/compilation_cache'
         ]);
         $this->controller->after();
@@ -90,15 +96,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     public function testTwig()
     {
         $this->assertNull($this->controller()->twig('index.html.twig', ['title' => 'title']));
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
-    public function testModel()
-    {
-        $this->controller()->setModel(Model::class);
-        $this->assertInstanceOf(Model::class, $this->controller()->model());
     }
 
     /**

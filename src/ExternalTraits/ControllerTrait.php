@@ -1,22 +1,20 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
- * Date: 27.03.17
- * Time: 11:50
- *
  * @author    : Korotkov Danila <dankorot@gmail.com>
- * @copyright Copyright (c) 2016, Korotkov Danila
+ * @copyright Copyright (c) 2018, Korotkov Danila
  * @license   http://www.gnu.org/licenses/gpl.html GNU GPLv3.0
  */
 
-namespace Rudra;
+namespace Rudra\ExternalTraits;
+
+use Rudra\Interfaces\ContainerInterface;
 
 /**
- * Class ControllerTrait
- *
- * @package Rudra
+ * Trait ControllerTrait
+ * @package Rudra\ExternalTraits
  */
 trait ControllerTrait
 {
@@ -32,11 +30,7 @@ trait ControllerTrait
      */
     public function setData($data, string $key = null): void
     {
-        if (isset($key)) {
-            $this->data[$key] = $data;
-        } else {
-            $this->data = $data;
-        }
+        (isset($key)) ? $this->data[$key] = $data : $this->data = $data;
     }
 
     /**
@@ -45,17 +39,12 @@ trait ControllerTrait
      */
     public function addData($data, string $key = null): void
     {
-        if (isset($key)) {
-            $this->data[$key] = $data;
-        } else {
-            $this->data = array_merge($this->data, $data);
-        }
+        (isset($key)) ? $this->data[$key] = $data : $this->data = array_merge($this->data, $data);
     }
 
     /**
-     * @param string $key
-     *
-     * @return string|array
+     * @param string|null $key
+     * @return mixed
      */
     public function data(string $key = null)
     {
@@ -63,25 +52,19 @@ trait ControllerTrait
     }
 
     /**
-     * @param string $key
-     * @param string $arrayKey
-     *
+     * @param string      $key
+     * @param string|null $subKey
      * @return bool
      */
-    public function hasData(string $key, string $arrayKey = null): bool
+    public function hasData(string $key, string $subKey = null): bool
     {
-        if (isset($arrayKey)) {
-            return isset($this->data[$key][$arrayKey]);
-        }
-
-        return isset($this->data[$key]);
+        return (isset($subKey)) ? isset($this->data[$key][$subKey]) : isset($this->data[$key]);
     }
 
     /**
      * @param $key
      * @param $path
-     *
-     * @return string
+     * @return array|string
      */
     public function fileUpload($key, $path)
     {
@@ -95,4 +78,9 @@ trait ControllerTrait
 
         return $this->container()->getPost($key);
     }
+
+    /**
+     * @return ContainerInterface
+     */
+    abstract public function container(): ContainerInterface;
 }
