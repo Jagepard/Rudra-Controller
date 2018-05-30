@@ -35,10 +35,6 @@ class Controller implements ControllerInterface
     use RouterMiddlewareTrait;
 
     /**
-     * @var string
-     */
-    protected $env;
-    /**
      * Twig_Environment
      */
     protected $twig;
@@ -53,14 +49,13 @@ class Controller implements ControllerInterface
 
     /**
      * @param ContainerInterface $container
-     * @param array              $template
      * @return mixed|void
      */
-    public function init(ContainerInterface $container, array $template)
+    public function init(ContainerInterface $container)
     {
         $this->container = $container;
         $this->csrfProtection();
-        $this->template($template);
+        $this->template();
     }
 
     /**
@@ -80,15 +75,17 @@ class Controller implements ControllerInterface
     }
 
     /**
-     * @param array $config
+     * Настройка twig
      */
-    public function template(array $config): void
+    public function template(): void
     {
-        if ($config['engine'] == 'twig') {
-            $loader = new Twig_Loader_Filesystem(BP . $config['view.path']);
+        if ($this->container()->config('engine') == 'twig') {
+            $loader = new Twig_Loader_Filesystem(
+                $this->container()->config('bp') . $this->container()->config('view.path')
+            );
             $this->setTwig(new Twig_Environment($loader, [
-                'cache' => $config['bp'] . $config['cache.path'],
-                'debug' => ($config['env'] == 'development') ? true : false,
+                'cache' => $this->container()->config('bp') . $this->container()->config('cache.path'),
+                'debug' => ($this->container()->config('env') == 'development') ? true : false,
             ]));
 
             $this->csrfField();
@@ -143,7 +140,7 @@ class Controller implements ControllerInterface
     public function render(string $path, array $data = []): void
     {
         $path = str_replace('.', '/', $path);
-        $file = BP . 'app/resources/tmpl/' . $path . '.tmpl.php';
+        $file = $this->container()->config('bp') . 'app/resources/tmpl/' . $path . '.tmpl.php';
 
         if (count($data)) {
             extract($data, EXTR_REFS);
