@@ -36,9 +36,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
     protected function setUp(): void
     {
-        define('DEV', true);
-        define('BP', dirname(__DIR__) . '/');
-
         $_FILES = [
             'upload' =>
                 ['name'     => ['img' => 'demo.png'],
@@ -55,17 +52,19 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         ];
 
         $this->container = Container::app();
-        $this->container->setBinding(ContainerInterface::class, Container::$app);
-        $this->container->set('debugbar', 'DebugBar\StandardDebugBar');
-        $this->controller = new Controller();
-        $this->controller->before();
-        $this->controller->init($this->container, [
+        $this->container->setConfig([
             'bp'         => dirname(__DIR__) . '/',
             'env'        => 'development',
             'engine'     => 'twig',
             'view.path'  => 'app/resources/twig/view',
             'cache.path' => 'app/resources/twig/compilation_cache'
         ]);
+
+        $this->container->setBinding(ContainerInterface::class, Container::$app);
+        $this->container->set('debugbar', 'DebugBar\StandardDebugBar');
+        $this->controller = new Controller();
+        $this->controller->before();
+        $this->controller->init($this->container);
         $this->controller->after();
     }
 
@@ -122,9 +121,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     public function testFileUpload()
     {
         define('APP_URL', 'http://example.com');
-        $this->controller()->fileUpload('img', BP . 'app/storage');
+        $this->controller()->fileUpload('img', $this->container->config('bp') . 'app/storage');
         $this->assertTrue($this->container()->isUploaded('img'));
-        $this->assertEquals($this->container()->getPost('image'), $this->controller()->fileUpload('image', BP . 'app/storage'));
+        $this->assertEquals($this->container()->getPost('image'), $this->controller()->fileUpload('image', $this->container->config('bp') . 'app/storage'));
     }
 
     /**
