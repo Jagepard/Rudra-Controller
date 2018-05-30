@@ -55,16 +55,17 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->container->setConfig([
             'bp'         => dirname(__DIR__) . '/',
             'env'        => 'development',
-            'engine'     => 'twig',
-            'view.path'  => 'app/resources/twig/view',
-            'cache.path' => 'app/resources/twig/compilation_cache'
         ]);
 
         $this->container->setBinding(ContainerInterface::class, Container::$app);
         $this->container->set('debugbar', 'DebugBar\StandardDebugBar');
         $this->controller = new Controller();
         $this->controller->before();
-        $this->controller->init($this->container);
+        $this->controller->init($this->container, [
+            'engine'     => 'twig',
+            'view.path'  => 'app/resources/twig/view',
+            'cache.path' => 'app/resources/twig/compilation_cache'
+        ]);
         $this->controller->after();
     }
 
