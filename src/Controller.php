@@ -49,13 +49,14 @@ class Controller implements ControllerInterface
 
     /**
      * @param ContainerInterface $container
+     * @param array              $config
      * @return mixed|void
      */
-    public function init(ContainerInterface $container)
+    public function init(ContainerInterface $container, array $config)
     {
         $this->container = $container;
         $this->csrfProtection();
-        $this->template();
+        $this->template($config);
     }
 
     /**
@@ -75,16 +76,16 @@ class Controller implements ControllerInterface
     }
 
     /**
-     * Настройка twig
+     * @param array $config
      */
-    public function template(): void
+    public function template(array $config): void
     {
-        if ($this->container()->config('engine') == 'twig') {
+        if ($config['engine'] == 'twig') {
             $loader = new Twig_Loader_Filesystem(
-                $this->container()->config('bp') . $this->container()->config('view.path')
+                $this->container()->config('bp') . $config['view.path']
             );
             $this->setTwig(new Twig_Environment($loader, [
-                'cache' => $this->container()->config('bp') . $this->container()->config('cache.path'),
+                'cache' => $this->container()->config('bp') . $config['cache.path'],
                 'debug' => ($this->container()->config('env') == 'development') ? true : false,
             ]));
 
