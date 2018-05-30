@@ -19,10 +19,9 @@ interface ControllerInterface
 
     /**
      * @param ContainerInterface $container
-     * @param array              $template
      * @return mixed
      */
-    public function init(ContainerInterface $container, array $template);
+    public function init(ContainerInterface $container);
 
     /**
      * Метод выполняется перед вызовом контроллера
@@ -35,9 +34,9 @@ interface ControllerInterface
     public function after();
 
     /**
-     * @param $config
+     * Настройка twig
      */
-    public function template(array $config): void;
+    public function template(): void;
 
     /**
      * CSRF protection
