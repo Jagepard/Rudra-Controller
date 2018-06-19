@@ -160,7 +160,9 @@ class Controller implements ControllerInterface
      */
     public function twig(string $template, array $params = []): void
     {
-        echo $this->getTwig()->render($template, $params);
+        $template = str_replace('.', '/', $template);
+
+        echo $this->getTwig()->render($template . '.html.twig', $params);
     }
 
     /**
