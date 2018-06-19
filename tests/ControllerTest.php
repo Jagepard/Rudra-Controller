@@ -53,8 +53,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
         $this->container = Container::app();
         $this->container->setConfig([
-            'bp'         => dirname(__DIR__) . '/',
-            'env'        => 'development',
+            'bp'  => dirname(__DIR__) . '/',
+            'env' => 'development',
         ]);
 
         $this->container->setBinding(ContainerInterface::class, Container::$app);
@@ -74,9 +74,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testInit()
     {
-        $this->assertInstanceOf(ContainerInterface::class, $this->controller()->container());
-        $this->assertTrue($this->container()->hasSession('csrf_token'));
-        $this->controller()->csrfProtection();
+        $this->assertInstanceOf(ContainerInterface::class, $this->controller->container());
+        $this->assertTrue($this->container->hasSession('csrf_token'));
+        $this->controller->csrfProtection();
     }
 
     /**
@@ -84,7 +84,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testView()
     {
-        $this->assertEquals('"Hello World!!!"', $this->controller()->view('index', ['title' => 'title']));
+        $this->assertEquals('"Hello World!!!"', $this->controller->view('index', ['title' => 'title']));
     }
 
     /**
@@ -92,7 +92,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testTwig()
     {
-        $this->assertNull($this->controller()->twig('index.html.twig', ['title' => 'title']));
+        $this->assertNull($this->controller->twig('index', ['title' => 'title']));
     }
 
     /**
@@ -100,20 +100,20 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testData()
     {
-        $this->controller()->setData([
+        $this->controller->setData([
                 'first' => 'one',
             ]
         );
 
-        $this->controller()->setData('two', 'second');
-        $this->controller()->addData(['first' => 'one'], 'array');
-        $this->controller()->addData(['two' => 'second']);
-        $this->assertEquals('one', $this->controller()->data('first'));
-        $this->assertEquals('two', $this->controller()->data('second'));
-        $this->assertArrayHasKey('first', $this->controller()->data());
-        $this->assertTrue($this->controller()->hasData('first'));
-        $this->assertTrue($this->controller()->hasData('second'));
-        $this->assertTrue($this->controller()->hasData('array', 'first'));
+        $this->controller->setData('two', 'second');
+        $this->controller->addData(['first' => 'one'], 'array');
+        $this->controller->addData(['two' => 'second']);
+        $this->assertEquals('one', $this->controller->data('first'));
+        $this->assertEquals('two', $this->controller->data('second'));
+        $this->assertArrayHasKey('first', $this->controller->data());
+        $this->assertTrue($this->controller->hasData('first'));
+        $this->assertTrue($this->controller->hasData('second'));
+        $this->assertTrue($this->controller->hasData('array', 'first'));
     }
 
     /**
@@ -122,24 +122,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     public function testFileUpload()
     {
         define('APP_URL', 'http://example.com');
-        $this->controller()->fileUpload('img', $this->container->config('bp') . 'app/storage');
-        $this->assertTrue($this->container()->isUploaded('img'));
-        $this->assertEquals($this->container()->getPost('image'), $this->controller()->fileUpload('image', $this->container->config('bp') . 'app/storage'));
-    }
-
-    /**
-     * @return ControllerInterface
-     */
-    public function controller(): ControllerInterface
-    {
-        return $this->controller;
-    }
-
-    /**
-     * @return ContainerInterface
-     */
-    public function container(): ContainerInterface
-    {
-        return $this->container;
+        $this->controller->fileUpload('img', $this->container->config('bp') . 'app/storage');
+        $this->assertTrue($this->container->isUploaded('img'));
+        $this->assertEquals($this->container->getPost('image'), $this->controller->fileUpload('image', $this->container->config('bp') . 'app/storage'));
     }
 }
