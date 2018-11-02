@@ -11,3 +11,5 @@
 
 # Rudra-Controller | [API](https://github.com/Jagepard/Rudra-Controller/blob/master/docs.md "Documentation API")
 Контроллер
+
+![Rudra-Controller](https://github.com/Jagepard/Rudra-Controller/blob/master/UML.png)
