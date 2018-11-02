@@ -9,5 +9,5 @@
 [![Total Downloads](https://poser.pugx.org/rudra/controller/downloads)](https://packagist.org/packages/rudra/controller)
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-498e7f.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-# Rudra-Controller
+# Rudra-Controller | [API](https://github.com/Jagepard/Rudra-Controller/blob/master/docs.md "Documentation API")
 Контроллер
