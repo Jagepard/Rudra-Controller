@@ -28,7 +28,7 @@ trait ControllerTrait
      * @param             $data
      * @param string|null $key
      */
-    public function setData($data, string $key = null): void
+    public function setData(string $key = null, $data): void
     {
         (isset($key)) ? $this->data[$key] = $data : $this->data = $data;
     }
@@ -37,8 +37,9 @@ trait ControllerTrait
      * @param             $data
      * @param string|null $key
      */
-    public function addData($data, string $key = null): void
+    public function addData(string $key = null, $data): void
     {
+        var_dump($data);
         (isset($key)) ? $this->data[$key] = $data : $this->data = array_merge($this->data, $data);
     }
 
