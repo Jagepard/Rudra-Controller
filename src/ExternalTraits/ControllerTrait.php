@@ -39,7 +39,6 @@ trait ControllerTrait
      */
     public function addData(string $key = null, $data): void
     {
-        var_dump($data);
         (isset($key)) ? $this->data[$key] = $data : $this->data = array_merge($this->data, $data);
     }
 
