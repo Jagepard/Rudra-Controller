@@ -48,15 +48,21 @@ class Controller implements ControllerInterface
     protected $container;
 
     /**
+     * Controller constructor.
      * @param ContainerInterface $container
-     * @param array              $config
-     * @return mixed|void
      */
-    public function init(ContainerInterface $container, array $config)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->csrfProtection();
-        $this->template($config);
+    }
+
+    /**
+     * @return mixed|void
+     */
+    public function init()
+    {
+
     }
 
     /**
@@ -82,11 +88,11 @@ class Controller implements ControllerInterface
     {
         if ($config['engine'] == 'twig') {
             $loader = new Twig_Loader_Filesystem(
-                $this->container()->config('bp') . $config['view.path']
+                $this->container->config('bp') . $config['view.path']
             );
             $this->setTwig(new Twig_Environment($loader, [
-                'cache' => $this->container()->config('bp') . $config['cache.path'],
-                'debug' => ($this->container()->config('env') == 'development') ? true : false,
+                'cache' => $this->container->config('bp') . $config['cache.path'],
+                'debug' => ($this->container->config('env') == 'development') ? true : false,
             ]));
 
             $this->csrfField();
@@ -100,21 +106,21 @@ class Controller implements ControllerInterface
     {
         isset($_SESSION) ?: session_start();
 
-        if ($this->container()->hasSession('csrf_token')) {
+        if ($this->container->hasSession('csrf_token')) {
             array_unshift($_SESSION['csrf_token'], md5(uniqid((string)mt_rand(), true)));
-            $this->container()->unsetSession('csrf_token', strval(count($this->container()->getSession('csrf_token')) - 1));
+            $this->container->unsetSession('csrf_token', strval(count($this->container->getSession('csrf_token')) - 1));
             return;
         }
 
         for ($i = 0; $i < 4; $i++) {
-            $this->container()->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), 'increment');
+            $this->container->setSession('csrf_token', md5(uniqid((string)mt_rand(), true)), 'increment');
         }
     }
 
     protected function csrfField(): void
     {
         $csrf = new Twig_SimpleFunction('csrf_field', function () {
-            return "<input type='hidden' name='csrf_field' value='{$this->container()->getSession('csrf_token', '0')}'>";// @codeCoverageIgnore
+            return "<input type='hidden' name='csrf_field' value='{$this->container->getSession('csrf_token', '0')}'>";// @codeCoverageIgnore
         });
 
         $this->getTwig()->addFunction($csrf);
@@ -141,7 +147,7 @@ class Controller implements ControllerInterface
     public function render(string $path, array $data = []): void
     {
         $path = str_replace('.', '/', $path);
-        $file = $this->container()->config('bp') . 'app/resources/tmpl/' . $path . '.tmpl.php';
+        $file = $this->container->config('bp') . 'app/resources/tmpl/' . $path . '.tmpl.php';
 
         if (count($data)) {
             extract($data, EXTR_REFS);
