@@ -18,11 +18,9 @@ interface ControllerInterface
 {
 
     /**
-     * @param ContainerInterface $container
-     * @param array              $config
-     * @return mixed|void
+     * @return mixed
      */
-    public function init(ContainerInterface $container, array $config);
+    public function init();
 
     /**
      * Метод выполняется перед вызовом контроллера
