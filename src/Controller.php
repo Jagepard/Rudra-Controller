@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * @author    : Korotkov Danila <dankorot@gmail.com>
- * @copyright Copyright (c) 2018, Korotkov Danila
- * @license   http://www.gnu.org/licenses/gpl.html GNU GPLv3.0
+ * @author    : Jagepard <jagepard@yandex.ru">
+ * @copyright Copyright (c) 2019, Jagepard
+ * @license   https://mit-license.org/ MIT
  */
 
 namespace Rudra;
@@ -28,7 +28,6 @@ use Rudra\Interfaces\ControllerInterface;
  */
 class Controller implements ControllerInterface
 {
-
     use AuthTrait;
     use ContainerTrait;
     use ControllerTrait;
@@ -86,7 +85,7 @@ class Controller implements ControllerInterface
      */
     public function template(array $config): void
     {
-        if ($config['engine'] == 'twig') {
+        if ($config['engine'] === 'twig') {
             $loader = new Twig_Loader_Filesystem(
                 $this->container->config('bp') . $config['view.path']
             );
@@ -167,8 +166,7 @@ class Controller implements ControllerInterface
     public function twig(string $template, array $params = []): void
     {
         $template = str_replace('.', '/', $template);
-
-        echo $this->getTwig()->render($template . '.html.twig', $params);
+        print $this->getTwig()->render($template . '.html.twig', $params);
     }
 
     /**
