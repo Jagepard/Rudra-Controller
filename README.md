@@ -7,7 +7,7 @@
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/Jagepard/Rudra-Controller/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 [![Latest Stable Version](https://poser.pugx.org/rudra/controller/v/stable)](https://packagist.org/packages/rudra/controller)
 [![Total Downloads](https://poser.pugx.org/rudra/controller/downloads)](https://packagist.org/packages/rudra/controller)
-[![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-498e7f.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![GitHub](https://img.shields.io/github/license/jagepard/Rudra-Controller.svg)
 
 # Rudra-Controller | [API](https://github.com/Jagepard/Rudra-Controller/blob/master/docs.md "Documentation API")
 Контроллер
