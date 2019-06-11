@@ -24,7 +24,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      * @var ContainerInterface
      */
     protected $container;
-
     /**
      * @var ControllerInterface
      */
