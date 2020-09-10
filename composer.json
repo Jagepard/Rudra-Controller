@@ -8,10 +8,10 @@
         "mvc-pattern",
         "mvc"
     ],
-    "license"           : "MIT",
+    "license"           : "GPL-3.0-or-later",
     "authors"           : [
         {
-            "name"     : "Jagepard",
+            "name"     : "Danila Korotkov (Jagepard)",
             "email"    : "jagepard@yandex.ru",
             "homepage" : "https://jagepard.ru",
             "role"     : "Developer"
@@ -22,19 +22,25 @@
         "skype" : "jagepard.ru"
     },
     "require"           : {
-        "php"               : ">=7.4",
+        "php"               : ">=7.1",
+        "twig/twig"         : "~1.0",
         "rudra/container"   : "self.version",
         "rudra/auth"        : "self.version",
-        "rudra/router"      : "self.version"
+        "rudra/router"      : "self.version",
+        "maximebf/debugbar" : "1.*"
+    },
+    "require-dev"       : {
+        "phpunit/phpunit": "^7",
+        "victorjonsson/markdowndocs": "dev-master"
     },
     "autoload"          : {
         "psr-4" : {
-            "Rudra\\Controller\\" : "src/"
+            "Rudra\\" : "src/"
         }
     },
     "autoload-dev" : {
         "psr-4": {
-            "Rudra\\Controller\\Tests\\" : "tests/"
+            "Rudra\\Tests\\" : "tests/"
         }
     },
     "minimum-stability" : "dev",
