@@ -35,6 +35,8 @@ class Controller implements ControllerInterface
 //     */
 //    protected $model;
 
+    private array $template;
+
     /**
      * Controller constructor.
      * @param ApplicationInterface $application
@@ -55,6 +57,13 @@ class Controller implements ControllerInterface
 
     public function after() // The method is executed after calling the controller
     {
+    }
+
+    public function template(array $config): void
+    {
+        if ($config["engine"] === "native") {
+            $this->template = $config;
+        }
     }
 
 //    public function template(array $config): void
@@ -100,20 +109,22 @@ class Controller implements ControllerInterface
 
     public function view(string $path, array $data = []): string
     {
-        $path = str_replace('.', '/', $path);
+        $path = "{$this->template["view.path"]}/"
+            . str_replace('.', '/', $path) .
+            ".{$this->template["file.extension"]}";
+
+        var_dump($path);
         ob_start();
-        $this->render($path, $data);
+
+        if (count($data)) extract($data, EXTR_REFS);
+        if (file_exists($path)) require_once $path;
 
         return ob_get_clean();
     }
 
     public function render(string $path, array $data = []): void
     {
-        $path = str_replace('.', '/', $path);
-        $file = $this->application()->config()->get("bp") . "app/resources/tmpl/" . $path . ".tmpl.php";
-
-        if (count($data)) extract($data, EXTR_REFS);
-        if (file_exists($file)) require_once $file;
+        echo $this->view($path, $data);
     }
 
 //    public function twig(string $template, array $params = []): void

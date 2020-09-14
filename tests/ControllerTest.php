@@ -54,6 +54,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 //            'view.path'  => 'app/resources/twig/view',
 //            'cache.path' => 'app/resources/twig/compilation_cache'
 //        ]);
+        $this->controller->template([
+            "engine"         => "native",
+            "view.path"      => "app/resources/tmpl",
+            "file.extension" => "tmpl.php"
+        ]);
         $this->controller->after();
     }
 
