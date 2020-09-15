@@ -13,7 +13,7 @@ use Rudra\Container\Interfaces\ApplicationInterface;
 
 trait ControllerTrait
 {
-    protected $data;
+    protected array $data;
 
     public function setData(?string $key, $data): void
     {
