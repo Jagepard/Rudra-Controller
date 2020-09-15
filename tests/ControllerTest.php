@@ -45,19 +45,13 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->application->binding()->set([ApplicationInterface::class => Application::run()]);
-//        $this->application->objset('debugbar', 'DebugBar\StandardDebugBar');
         $this->controller = new Controller($this->application);
         $this->controller->before();
         $this->controller->init();
-//        $this->controller->template([
-//            'engine'     => 'twig',
-//            'view.path'  => 'app/resources/twig/view',
-//            'cache.path' => 'app/resources/twig/compilation_cache'
-//        ]);
         $this->controller->template([
             "engine"         => "native",
             "view.path"      => "app/resources/tmpl",
-            "file.extension" => "tmpl.php"
+            "file.extension" => "tmpl"
         ]);
         $this->controller->after();
     }
@@ -79,14 +73,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('"Hello World!!!"', $this->controller->view("index", ["title" => "title"]));
     }
-
-    /**
-     * @runInSeparateProcess
-     */
-//    public function testTwig()
-//    {
-//        $this->assertNull($this->controller->twig("index", ["title" => "title"]));
-//    }
 
     /**
      * @runInSeparateProcess
