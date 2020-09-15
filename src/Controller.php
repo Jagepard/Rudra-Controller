@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace Rudra\Controller;
 
-//use \Twig_Environment;
-//use \Twig_SimpleFunction;
-//use \Twig_Loader_Filesystem;
 use Rudra\Auth\AuthTrait;
 use Rudra\Container\Interfaces\ApplicationInterface;
 use Rudra\Container\Traits\SetApplicationContainersTrait;
@@ -25,15 +22,6 @@ class Controller implements ControllerInterface
     use SetApplicationContainersTrait {
         SetApplicationContainersTrait::__construct as protected __setContainerTraitConstruct;
     }
-
-//    /**
-//     * Twig_Environment
-//     */
-//    protected $twig;
-//    /**
-//     * @var
-//     */
-//    protected $model;
 
     private array $template;
 
@@ -61,25 +49,12 @@ class Controller implements ControllerInterface
 
     public function template(array $config): void
     {
-        if ($config["engine"] === "native") {
-            $this->template = $config;
+        switch ($config["engine"]) {
+            case "native":
+                $this->template = $config;
+                break;
         }
     }
-
-//    public function template(array $config): void
-//    {
-//        if ($config['engine'] === 'twig') {
-//            $loader = new Twig_Loader_Filesystem(
-//                $this->application()->config('bp') . $config['view.path']
-//            );
-//            $this->setTwig(new Twig_Environment($loader, [
-//                'cache' => $this->application()->config('bp') . $config['cache.path'],
-//                'debug' => ($this->application()->config('env') == 'development') ? true : false,
-//            ]));
-//
-//            $this->csrfField();
-//        }
-//    }
 
     public function csrfProtection(): void
     {
@@ -109,11 +84,10 @@ class Controller implements ControllerInterface
 
     public function view(string $path, array $data = []): string
     {
-        $path = "{$this->template["view.path"]}/"
+        $path = "{$this->application()->config()->get("bp")}{$this->template["view.path"]}/"
             . str_replace('.', '/', $path) .
             ".{$this->template["file.extension"]}";
 
-        var_dump($path);
         ob_start();
 
         if (count($data)) extract($data, EXTR_REFS);
@@ -122,24 +96,8 @@ class Controller implements ControllerInterface
         return ob_get_clean();
     }
 
-    public function render(string $path, array $data = []): void
+    public function render(string $path, array $data = [])
     {
         echo $this->view($path, $data);
     }
-
-//    public function twig(string $template, array $params = []): void
-//    {
-//        $template = str_replace('.', '/', $template);
-//        print $this->getTwig()->render($template . ".html.twig", $params);
-//    }
-
-//    public function setTwig(Twig_Environment $twig): void
-//    {
-//        $this->twig = $twig;
-//    }
-
-//    public function getTwig(): Twig_Environment
-//    {
-//        return $this->twig;
-//    }
 }
