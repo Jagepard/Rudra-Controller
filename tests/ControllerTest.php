@@ -48,11 +48,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->controller = new Controller($this->application);
         $this->controller->before();
         $this->controller->init();
-        $this->controller->template([
-            "engine"         => "native",
-            "view.path"      => "app/resources/tmpl",
-            "file.extension" => "tmpl.php"
-        ]);
         $this->controller->after();
     }
 
@@ -64,14 +59,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ApplicationInterface::class, $this->controller->application());
         $this->assertTrue($this->application->session()->has("csrf_token"));
         $this->controller->csrfProtection();
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
-    public function testView()
-    {
-        $this->assertEquals('"Hello World!!!"', $this->controller->view("index", ["title" => "title"]));
     }
 
     /**
