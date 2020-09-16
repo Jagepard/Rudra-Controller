@@ -51,7 +51,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->controller->template([
             "engine"         => "native",
             "view.path"      => "app/resources/tmpl",
-            "file.extension" => "tmpl"
+            "file.extension" => "tmpl.php"
         ]);
         $this->controller->after();
     }
