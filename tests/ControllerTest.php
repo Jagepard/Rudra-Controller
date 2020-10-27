@@ -11,14 +11,14 @@ declare(strict_types=1);
 
 namespace Rudra\Controller\Tests;
 
-use Rudra\Container\{Application, Interfaces\ApplicationInterface};
+use Rudra\Container\{Interfaces\RudraInterface};
+use Rudra\Container\Facades\Rudra as Rudra;
+use Rudra\Container\Facades\Session;
 use Rudra\Controller\{Controller, ControllerInterface};
 use PHPUnit\Framework\TestCase as PHPUnit_Framework_TestCase;
 
 class ControllerTest extends PHPUnit_Framework_TestCase
 {
-
-    protected ApplicationInterface $application;
     protected ControllerInterface $controller;
 
     protected function setUp(): void
@@ -38,14 +38,15 @@ class ControllerTest extends PHPUnit_Framework_TestCase
             'image' => "http://example.com/images/image.png",
         ];
 
-        $this->application = Application::run();
-        $this->application->config()->set([
+        Rudra::config()->set([
             "bp"  => dirname(__DIR__) . '/',
             "env" => "development",
         ]);
 
-        $this->application->binding()->set([ApplicationInterface::class => Application::run()]);
-        $this->controller = new Controller($this->application);
+        Rudra::binding()->set([RudraInterface::class => Rudra::run()]);
+
+        $this->controller = new Controller(Rudra::run());
+
         $this->controller->before();
         $this->controller->init();
         $this->controller->after();
@@ -56,8 +57,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testInit()
     {
-        $this->assertInstanceOf(ApplicationInterface::class, $this->controller->application());
-        $this->assertTrue($this->application->session()->has("csrf_token"));
+        $this->assertInstanceOf(RudraInterface::class, $this->controller->rudra());
+        $this->assertTrue(Session::has("csrf_token"));
         $this->controller->csrfProtection();
     }
 
@@ -85,11 +86,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     public function testFileUpload()
     {
         define("APP_URL", "http://example.com");
-        $this->controller->fileUpload("img", $this->application->config()->get("bp") . "app/storage");
-        $this->assertTrue($this->application->request()->files()->isLoaded("img"));
+        $this->controller->fileUpload("img", Rudra::config()->get("bp") . "app/storage");
+        $this->assertTrue(Rudra::request()->files()->isLoaded("img"));
         $this->assertEquals(
-            $this->application->request()->post()->get("image"),
-            $this->controller->fileUpload("image", $this->application->config()->get("bp") . "app/storage"
+            Rudra::request()->post()->get("image"),
+            $this->controller->fileUpload("image", Rudra::config()->get("bp") . "app/storage"
         ));
     }
 }
