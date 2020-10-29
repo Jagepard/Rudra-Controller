@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Rudra\Controller;
 
+use Rudra\Container\Container;
+use Rudra\Container\Interfaces\ContainerInterface;
 use Rudra\Container\Interfaces\RudraInterface;
 use Rudra\Container\Traits\SetRudraContainersTrait;
 use Rudra\Router\Traits\RouterMiddlewareTrait;
@@ -21,9 +23,12 @@ class Controller implements ControllerInterface
         SetRudraContainersTrait::__construct as protected __SetRudraContainersTrait;
     }
 
+    protected ContainerInterface $data;
+
     public function __construct(RudraInterface $rudra)
     {
         $this->__SetRudraContainersTrait($rudra);
+        $this->data = new Container([]);
         $this->csrfProtection();
     }
 

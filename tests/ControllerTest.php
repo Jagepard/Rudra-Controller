@@ -65,24 +65,6 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testData()
-    {
-        $this->controller->setData(null, ["first" => "one"]);
-
-        $this->controller->setData("second", "two");
-        $this->controller->addData("array", ["first" => "one"]);
-        $this->controller->addData(null, ["two" => "second"]);
-        $this->assertEquals("one", $this->controller->data("first"));
-        $this->assertEquals("two", $this->controller->data("second"));
-        $this->assertArrayHasKey("first", $this->controller->data());
-        $this->assertTrue($this->controller->hasData("first"));
-        $this->assertTrue($this->controller->hasData("second"));
-        $this->assertTrue($this->controller->hasData("array", "first"));
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
     public function testFileUpload()
     {
         define("APP_URL", "http://example.com");
