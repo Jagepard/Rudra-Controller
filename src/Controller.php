@@ -49,24 +49,15 @@ class Controller implements ControllerInterface
         isset($_SESSION) ?: session_start();
 
         if ($this->rudra()->session()->has("csrf_token")) {
+            unset($_SESSION["csrf_token"][count($_SESSION["csrf_token"]) - 1]);
             array_unshift($_SESSION["csrf_token"], md5(uniqid((string)mt_rand(), true)));
-            $this->rudra()->session()
-                ->unset("csrf_token", strval(count($this->rudra()->session()->get("csrf_token")) - 1));
             return;
         }
 
         for ($i = 0; $i < 4; $i++) {
-            $this->rudra()->session()
-                ->set(["csrf_token", [md5(uniqid((string)mt_rand(), true)), "increment"]]);
+            $csrf[] = md5(uniqid((string)mt_rand(), true));
         }
-    }
 
-//    protected function csrfField(): void
-//    {
-//        $csrf = new Twig_SimpleFunction('csrf_field', function () {
-//            return "<input type='hidden' name='csrf_field' value='{$this->rudra()->getSession("csrf_token", '0')}'>";// @codeCoverageIgnore
-//        });
-//
-//        $this->getTwig()->addFunction($csrf);
-//    }
+        $this->rudra()->session()->set(["csrf_token", $csrf]);
+    }
 }
