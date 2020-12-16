@@ -36,6 +36,14 @@ class Controller implements ControllerInterface
     {
     }
 
+    public function eventRegistration() // The method for events register
+    {
+    }
+
+    public function generalPreCall()
+    {
+    }
+
     public function before() // The method is executed before calling the controller
     {
     }
