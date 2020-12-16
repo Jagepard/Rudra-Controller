@@ -47,8 +47,10 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
         $this->controller = new Controller(Rudra::run());
 
-        $this->controller->before();
         $this->controller->init();
+        $this->controller->eventRegistration();
+        $this->controller->generalPreCall();
+        $this->controller->before();
         $this->controller->after();
     }
 
