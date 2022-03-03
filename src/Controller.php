@@ -59,7 +59,7 @@ class Controller implements ControllerInterface
             return;
         }
 
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $csrf[] = md5(uniqid((string)mt_rand(), true));
         }
 
