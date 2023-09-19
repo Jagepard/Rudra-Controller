@@ -9,8 +9,18 @@ declare(strict_types=1);
 
 namespace Rudra\Controller;
 
+/**
+ * @deprecated
+ */
 trait ControllerTrait
 {
+    /**
+     * @deprecated
+     *
+     * @param  [type] $key
+     * @param  [type] $path
+     * @return void
+     */
     public function fileUpload($key, $path)
     {
         if ($this->rudra()->request()->files()->isLoaded($key)) {
