@@ -23,32 +23,81 @@ class Controller implements ControllerInterface
 
     protected ContainerInterface $data;
 
+    /**
+     * Creates a common data container,
+     * runs csrfProtection
+     * ---------------------------------
+     * Создает общий контейнер данных,
+     * запускает csrfProtection
+     */
     public function __construct()
     {
         $this->data = new Container([]);
         $this->csrfProtection();
     }
 
-    public function init()
-    {
-    }
-
+    /**
+     * The method for events register
+     * ------------------------------
+     * Метод для регистрации событий
+     *
+     * @return void
+     */
     public function eventRegistration() // The method for events register
     {
     }
 
+    /**
+     * General pre-call before initialization
+     * --------------------------------------
+     * Общий предварительный вызов до инициализации
+     *
+     * @return void
+     */
     public function generalPreCall()
     {
     }
 
-    public function before() // The method is executed before calling the controller
+    /**
+     * Initializes the necessary data
+     * ------------------------------
+     * Инициализирует необходимые данные
+     * 
+     * @return void
+     */
+    public function init()
     {
     }
 
+    /**
+     * The method is executed before calling the controller
+     * ----------------------------------------------------
+     * Метод выполняется перед вызовом контроллера
+     *
+     * @return void
+     */
+    public function before()
+    {
+    }
+
+    /**
+     * The method is executed after calling the controller
+     * ---------------------------------------------------
+     * Метод выполняется после вызова контроллера
+     *
+     * @return void
+     */
     public function after() // The method is executed after calling the controller
     {
     }
 
+    /**
+     * Method to protect against CSRF attack
+     * -------------------------------------
+     * Метод защиты от CSRF-атаки
+     *
+     * @return void
+     */
     public function csrfProtection(): void
     {
         isset($_SESSION) ?: session_start();
