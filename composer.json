@@ -25,7 +25,8 @@
         "php"               : ">=7.4",
         "rudra/container"   : "self.version",
         "rudra/auth"        : "self.version",
-        "rudra/router"      : "self.version"
+        "rudra/router"      : "self.version",
+        "rudra/docs": "dev-master"
     },
     "autoload"          : {
         "psr-4" : {
