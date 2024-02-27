@@ -22,8 +22,6 @@ class Controller implements ControllerInterface
         SetRudraContainersTrait::__construct as protected __setRudraContainersTrait;
     }
 
-    protected ContainerInterface $data;
-
     /**
      * Creates a common data container,
      * runs csrfProtection
@@ -34,7 +32,6 @@ class Controller implements ControllerInterface
     public function __construct(RudraInterface $rudra)
     {
         $this->__setRudraContainersTrait($rudra);
-        $this->data = new Container([]);
         $this->csrfProtection();
     }
 
