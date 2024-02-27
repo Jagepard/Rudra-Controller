@@ -9,29 +9,18 @@ declare(strict_types=1);
 
 namespace Rudra\Controller;
 
-use Rudra\Container\Container;
 use Rudra\Container\Facades\Session;
 use Rudra\Container\Interfaces\RudraInterface;
-use Rudra\Container\Interfaces\ContainerInterface;
-use Rudra\Container\Traits\SetRudraContainersTrait;
 
 class Controller implements ControllerInterface
 {
-    use ControllerTrait;
-    use SetRudraContainersTrait {
-        SetRudraContainersTrait::__construct as protected __setRudraContainersTrait;
-    }
-
     /**
-     * Creates a common data container,
      * runs csrfProtection
      * ---------------------------------
-     * Создает общий контейнер данных,
      * запускает csrfProtection
      */
-    public function __construct(RudraInterface $rudra)
+    public function __construct()
     {
-        $this->__setRudraContainersTrait($rudra);
         $this->csrfProtection();
     }
 
