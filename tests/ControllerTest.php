@@ -23,33 +23,10 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
     protected function setUp(): void
     {
-        $_FILES = [
-            "upload" =>
-                ["name"     => ["img" => "demo.png"],
-                 "type"     => ["img" => "image/png"],
-                 "tmp_name" => ["img" => "/tmp/phpiQuDkR"],
-                 "error"    => ["img" => 0],
-                 "size"     => ["img" => 9584],
-                ]
-        ];
-
-        $_POST = [
-            "img"   => "http://example.com/images/img.png",
-            'image' => "http://example.com/images/image.png",
-        ];
-
-        Rudra::config()->set([
-            "bp"  => dirname(__DIR__) . '/',
-            "env" => "development",
-        ]);
-
-        Rudra::binding()->set([RudraInterface::class => Rudra::run()]);
-
-        $this->controller = new Controller(Rudra::run());
+        $this->controller = new Controller();
 
         $this->controller->init();
-        $this->controller->eventRegistration();
-        $this->controller->generalPreCall();
+        $this->controller->shipInit();
         $this->controller->before();
         $this->controller->after();
     }
@@ -59,22 +36,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testInit()
     {
-        $this->assertInstanceOf(RudraInterface::class, $this->controller->rudra());
         $this->assertTrue(Session::has("csrf_token"));
         $this->controller->csrfProtection();
-    }
-
-    /**
-     * @runInSeparateProcess
-     */
-    public function testFileUpload()
-    {
-        define("APP_URL", "http://example.com");
-        $this->controller->fileUpload("img", Rudra::config()->get("bp") . "app/storage");
-        $this->assertTrue(Rudra::request()->files()->isLoaded("img"));
-        $this->assertEquals(
-            Rudra::request()->post()->get("image"),
-            $this->controller->fileUpload("image", Rudra::config()->get("bp") . "app/storage"
-        ));
     }
 }

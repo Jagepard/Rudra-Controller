@@ -25,26 +25,13 @@ class Controller implements ControllerInterface
     }
 
     /**
-     * The method for events register
-     * ------------------------------
-     * Метод для регистрации событий
-     *
-     * @return void
-     */
-    public function eventRegistration() // The method for events register
-    {
-    }
-
-    /**
      * General pre-call before initialization
      * --------------------------------------
      * Общий предварительный вызов до инициализации
      *
      * @return void
      */
-    public function generalPreCall()
-    {
-    }
+    public function shipInit(): void{}
 
     /**
      * Initializes the necessary data
@@ -53,7 +40,7 @@ class Controller implements ControllerInterface
      * 
      * @return void
      */
-    public function init()
+    public function init(): void
     {
     }
 
@@ -64,7 +51,7 @@ class Controller implements ControllerInterface
      *
      * @return void
      */
-    public function before()
+    public function before(): void
     {
     }
 
@@ -75,7 +62,7 @@ class Controller implements ControllerInterface
      *
      * @return void
      */
-    public function after() // The method is executed after calling the controller
+    public function after(): void // The method is executed after calling the controller
     {
     }
 

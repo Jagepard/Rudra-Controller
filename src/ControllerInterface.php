@@ -10,31 +10,13 @@ namespace Rudra\Controller;
 interface ControllerInterface
 {
     /**
-     * The method for events register
-     * ------------------------------
-     * Метод для регистрации событий
-     *
-     * @return void
-     */
-    public function eventRegistration();
-
-    /**
-     * General pre-call before initialization
-     * --------------------------------------
-     * Общий предварительный вызов до инициализации
-     *
-     * @return void
-     */
-    public function generalPreCall();
-
-    /**
      * Initializes the necessary data
      * ------------------------------
      * Инициализирует необходимые данные
      * 
      * @return void
      */
-    public function init();
+    public function init(): void;
 
     /**
      * The method is executed before calling the controller
@@ -43,7 +25,7 @@ interface ControllerInterface
      *
      * @return void
      */
-    public function before();
+    public function before(): void;
 
     /**
      * The method is executed after calling the controller
@@ -52,15 +34,5 @@ interface ControllerInterface
      *
      * @return void
      */
-    public function after();
-
-    /**
-     * Method to protect against CSRF attack
-     * -------------------------------------
-     * Метод защиты от CSRF-атаки
-     *
-     * @return void
-     */
-    public function csrfProtection(): void;
+    public function after(): void;
 }
-
