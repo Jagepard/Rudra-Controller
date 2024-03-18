@@ -7,7 +7,7 @@
 
 namespace Rudra\Controller;
 
-interface ConainersControllerInterface
+interface ContainersControllerInterface
 {
     /**
      * Initializes the necessary data
@@ -17,4 +17,13 @@ interface ConainersControllerInterface
      * @return void
      */
     public function containerInit(): void;
+
+    /**
+     * The method for events register
+     * ------------------------------
+     * Метод для регистрации событий
+     *
+     * @return void
+     */
+    public function eventRegistration(): void;
 }
