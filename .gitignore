@@ -3,3 +3,4 @@
 /composer.lock
 /app/resources/twig/compilation_cache/
 /tests/build/
+/.idea/
