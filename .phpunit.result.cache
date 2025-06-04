@@ -1,1 +1,1 @@
-{"version":1,"defects":{"Rudra\\Controller\\Tests\\ControllerTest::testInit":4,"Rudra\\Controller\\Tests\\ControllerTest::testFileUpload":4},"times":{"Rudra\\Controller\\Tests\\ControllerTest::testInit":0.042,"Rudra\\Controller\\Tests\\ControllerTest::testFileUpload":0.052}}
+{"version":1,"defects":{"Rudra\\Controller\\Tests\\ControllerTest::testInit":4,"Rudra\\Controller\\Tests\\ControllerTest::testFileUpload":4},"times":{"Rudra\\Controller\\Tests\\ControllerTest::testInit":0.001,"Rudra\\Controller\\Tests\\ControllerTest::testFileUpload":0.052}}
