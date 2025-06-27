@@ -10,20 +10,19 @@
 ### Class: Rudra\Controller\ContainerControllerInterface
 | Visibility | Function |
 |:-----------|:---------|
-|abstract public|<em><strong>containerInit</strong>(): void</em><br>|
+| abstract public | `containerInit(): void`<br> |
 
 
 <a id="rudra_controller_controller"></a>
 
 ### Class: Rudra\Controller\Controller
-##### implements [Rudra\Controller\ControllerInterface](#rudra_controller_controllerinterface)
 | Visibility | Function |
 |:-----------|:---------|
-|public|<em><strong>__construct</strong>()</em><br>|
-|public|<em><strong>init</strong>(): void</em><br>|
-|public|<em><strong>before</strong>(): void</em><br>|
-|public|<em><strong>after</strong>(): void</em><br>|
-|public|<em><strong>csrfProtection</strong>(): void</em><br>Method to protect against CSRF attack|
+| public | `__construct()`<br> |
+| public | `init(): void`<br> |
+| public | `before(): void`<br> |
+| public | `after(): void`<br> |
+| public | `csrfProtection(): void`<br>Method to protect against CSRF attack |
 
 
 <a id="rudra_controller_controllerinterface"></a>
@@ -31,9 +30,9 @@
 ### Class: Rudra\Controller\ControllerInterface
 | Visibility | Function |
 |:-----------|:---------|
-|abstract public|<em><strong>init</strong>(): void</em><br>|
-|abstract public|<em><strong>before</strong>(): void</em><br>|
-|abstract public|<em><strong>after</strong>(): void</em><br>|
+| abstract public | `init(): void`<br> |
+| abstract public | `before(): void`<br> |
+| abstract public | `after(): void`<br> |
 
 
 <a id="rudra_controller_shipcontrollerinterface"></a>
@@ -41,8 +40,8 @@
 ### Class: Rudra\Controller\ShipControllerInterface
 | Visibility | Function |
 |:-----------|:---------|
-|abstract public|<em><strong>shipInit</strong>(): void</em><br>|
-|abstract public|<em><strong>eventRegistration</strong>(): void</em><br>|
+| abstract public | `shipInit(): void`<br> |
+| abstract public | `eventRegistration(): void`<br> |
 <hr>
 
 ###### created with [Rudra-Documentation-Collector](#https://github.com/Jagepard/Rudra-Documentation-Collector)

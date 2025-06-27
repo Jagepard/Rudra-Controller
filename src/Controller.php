@@ -19,8 +19,19 @@ class Controller implements ControllerInterface
         $this->csrfProtection();
     }
 
+    /**
+     * @return void
+     */
     public function init(): void {}
+
+    /**
+     * @return void
+     */
     public function before(): void {}
+
+    /**
+     * @return void
+     */
     public function after(): void {}
 
     /**
