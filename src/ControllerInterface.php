@@ -11,7 +11,18 @@ namespace Rudra\Controller;
 
 interface ControllerInterface
 {
+    /**
+     * @return void
+     */
     public function init(): void;
+
+    /**
+     * @return void
+     */
     public function before(): void;
+
+    /**
+     * @return void
+     */
     public function after(): void;
 }
