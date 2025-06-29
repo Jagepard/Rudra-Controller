@@ -42,12 +42,13 @@ class Controller implements ControllerInterface
     public function csrfProtection(): void
     {
         if (!isset($_SESSION)) {
+            $local = (php_sapi_name() == "cli-server");
             session_set_cookie_params([
                 'lifetime' => 604800, // 7 days
                 'path' => '/',
-                'secure' => true,
+                'secure' => !$local,
                 'httponly' => true,
-                'samesite' => 'Strict'
+                'samesite' => 'Lax'
             ]);
             session_start();
         }
