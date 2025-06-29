@@ -42,6 +42,13 @@ class Controller implements ControllerInterface
     public function csrfProtection(): void
     {
         if (!isset($_SESSION)) {
+            session_set_cookie_params([
+                'lifetime' => 604800, // 7 days
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]);
             session_start();
         }
 
