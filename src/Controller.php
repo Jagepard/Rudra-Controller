@@ -63,6 +63,6 @@ class Controller implements ControllerInterface
             $csrf[] = bin2hex(random_bytes(32));
         }
 
-        Session::set(["csrf_token", $csrf]);
+        Session::set("csrf_token", $csrf);
     }
 }
