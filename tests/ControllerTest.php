@@ -14,13 +14,12 @@
 
 namespace Rudra\Controller\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Rudra\Container\Facades\Session;
 use Rudra\Container\Facades\Rudra as Rudra;
-use Rudra\Container\Interfaces\RudraInterface;
-use Rudra\Controller\{Controller, ControllerInterface};
+use Rudra\Controller\Controller;
+use Rudra\Controller\ControllerInterface;
 
-class ControllerTest extends TestCase
+class ControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected ControllerInterface $controller;
 
