@@ -13,13 +13,6 @@ namespace Rudra\Controller;
 
 interface ShipControllerInterface
 {
-    /**
-     * @return void
-     */
     public function shipInit(): void;
-
-    /**
-     * @return void
-     */
     public function eventRegistration(): void;
 }

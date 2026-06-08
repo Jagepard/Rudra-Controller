@@ -3,7 +3,11 @@
 - [Rudra\Controller\Controller](#rudra_controller_controller)
 - [Rudra\Controller\ControllerInterface](#rudra_controller_controllerinterface)
 - [Rudra\Controller\ShipControllerInterface](#rudra_controller_shipcontrollerinterface)
-<hr>
+
+
+---
+
+
 
 <a id="rudra_controller_containercontrollerinterface"></a>
 
@@ -42,6 +46,8 @@
 |:-----------|:---------|
 | abstract public | `shipInit(): void`<br> |
 | abstract public | `eventRegistration(): void`<br> |
-<hr>
 
-###### created with [Rudra-Documentation-Collector](#https://github.com/Jagepard/Rudra-Documentation-Collector)
+
+---
+
+###### created with [Rudra-Documentation-Collector](https://github.com/Jagepard/Rudra-Documentation-Collector)

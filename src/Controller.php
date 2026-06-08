@@ -20,30 +20,17 @@ class Controller implements ControllerInterface
         $this->csrfProtection();
     }
 
-    /**
-     * @return void
-     */
     #[\Override]
     public function init(): void {}
 
-    /**
-     * @return void
-     */
     #[\Override]
     public function before(): void {}
 
-    /**
-     * @return void
-     */
     #[\Override]
     public function after(): void {}
 
     /**
      * Method to protect against CSRF attack
-     * ---------------  
-     * Метод защиты от CSRF-атак
-     *
-     * @return void
      */
     public function csrfProtection(): void
     {
