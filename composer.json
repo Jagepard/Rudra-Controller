@@ -23,7 +23,7 @@
         "source": "https://github.com/Jagepard/Rudra-Controller"    
     },
     "require": {
-        "php": ">=8.3",
+        "php": "^8.3",
         "rudra/docs": "self.version"
     },
     "autoload": {
