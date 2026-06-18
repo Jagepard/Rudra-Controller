@@ -5,8 +5,42 @@
 -----
 
 # Rudra-Controller | [API](https://github.com/Jagepard/Rudra-Controller/blob/master/docs.md "Documentation API")
-Контроллер
 
+## Lightweight, Transparent, and Secure MVC Implementation
+
+A high-performance controller abstraction for the **Rudra Framework**. Designed with a "no-magic" philosophy, strict typing, and enterprise-grade security out-of-the-box.
+
+#### 🧩 Lifecycle Hooks
+Structured execution flow to maintain separation of concerns without layer pollution:
+*   `init()` — Initialization of dependencies.
+*   `before()` — Pre-action checks and routing.
+*   `after()` — Post-action handling.
+
+---
+
+### 🚀 Installation
+
+Install via Composer (assuming the package registry):
+
+```bash
+composer require rudra/controller
+```
+### 📖 Quick Start
+
+```php
+<?php declare(strict_types=1);
+
+namespace App\Containers\Container\Controller;
+
+class SomeController extends ContainerController
+{
+    public function index(): void
+    {
+        // Your logic here - CSRF already protected
+        echo "Hello, Rudra!";
+    }
+}
+```
 ## License
 
 This project is licensed under the **Mozilla Public License 2.0 (MPL-2.0)** — a free, open-source license that:
@@ -18,13 +52,3 @@ This project is licensed under the **Mozilla Public License 2.0 (MPL-2.0)** — 
 
 📄 Full license text: [LICENSE](./LICENSE)  
 🌐 Official MPL-2.0 page: https://mozilla.org/MPL/2.0/
-
---------------------------
-Проект распространяется под лицензией **Mozilla Public License 2.0 (MPL-2.0)**. Это означает:
- - Вы можете свободно использовать, изменять и распространять код.
- - При изменении файлов, содержащих исходный код из этого репозитория, вы обязаны оставить их открытыми под той же лицензией.
- - Вы **обязаны сохранять уведомления об авторстве** и ссылку на оригинал.
- - Вы можете встраивать код в проприетарные проекты, если исходные файлы остаются под MPL.
-
-📄  Полный текст лицензии (на английском): [LICENSE](./LICENSE)  
-🌐 Официальная страница: https://mozilla.org/MPL/2.0/
