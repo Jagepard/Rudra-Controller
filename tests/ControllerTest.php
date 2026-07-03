@@ -12,7 +12,6 @@
 namespace Rudra\Controller\Tests;
 
 use Rudra\Container\Facades\Session;
-use Rudra\Container\Facades\Rudra as Rudra;
 use Rudra\Controller\Controller;
 use Rudra\Controller\ControllerInterface;
 
@@ -20,7 +19,7 @@ class ControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected ControllerInterface $controller;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->controller = new Controller();
 
