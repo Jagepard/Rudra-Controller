@@ -19,7 +19,7 @@ class ControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected ControllerInterface $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->controller = new Controller();
 
