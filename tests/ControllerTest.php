@@ -33,7 +33,7 @@ class ControllerTest extends \PHPUnit\Framework\TestCase
      */
     public function testInit()
     {
-        $this->assertTrue(Session::has("csrf_token"));
+        $this->assertTrue(Session::has('csrf_token'));
         $this->controller->csrfProtection();
     }
 }
