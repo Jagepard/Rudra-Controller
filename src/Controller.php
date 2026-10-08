@@ -35,7 +35,7 @@ class Controller implements ControllerInterface
     public function csrfProtection(): void
     {
         if (!isset($_SESSION)) {
-            $local = (php_sapi_name() === "cli-server");
+            $local = (php_sapi_name() === 'cli-server');
             session_set_cookie_params([
                 'lifetime' => 604800, // 7 days
                 'path'     => '/',
@@ -46,9 +46,9 @@ class Controller implements ControllerInterface
             session_start();
         }
 
-        if (Session::has("csrf_token")) {
-            array_pop($_SESSION["csrf_token"]);
-            array_unshift($_SESSION["csrf_token"], bin2hex(random_bytes(32)));
+        if (Session::has('csrf_token')) {
+            array_pop($_SESSION['csrf_token']);
+            array_unshift($_SESSION['csrf_token'], bin2hex(random_bytes(32)));
             return;
         }
 
@@ -56,6 +56,6 @@ class Controller implements ControllerInterface
             $csrf[] = bin2hex(random_bytes(32));
         }
 
-        Session::set("csrf_token", $csrf);
+        Session::set('csrf_token', $csrf);
     }
 }

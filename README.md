@@ -4,11 +4,11 @@
 [![Coverage Status](https://coveralls.io/repos/github/Jagepard/Rudra-Controller/badge.svg?branch=master)](https://coveralls.io/github/Jagepard/Rudra-Controller?branch=master)
 -----
 
-# Rudra-Controller | [API](https://github.com/Jagepard/Rudra-Controller/blob/master/docs.md "Documentation API")
+# Rudra-Controller | [API](https://github.com/Jagepard/Rudra-Controller/blob/master/docs.md 'Documentation API')
 
 ## Lightweight, Transparent, and Secure MVC Implementation
 
-A high-performance controller abstraction for the **Rudra Framework**. Designed with a "no-magic" philosophy, strict typing, and enterprise-grade security out-of-the-box.
+A high-performance controller abstraction for the **Rudra Framework**. Designed with a 'no-magic' philosophy, strict typing, and enterprise-grade security out-of-the-box.
 
 #### 🧩 Lifecycle Hooks
 Structured execution flow to maintain separation of concerns without layer pollution:
@@ -37,7 +37,7 @@ class SomeController extends ContainerController
     public function index(): void
     {
         // Your logic here - CSRF already protected
-        echo "Hello, Rudra!";
+        echo 'Hello, Rudra!';
     }
 }
 ```
